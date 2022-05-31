@@ -29,6 +29,7 @@ import { getLocationState, makeLocationState } from '../util/location-state';
 import { ActiveLocationProvider } from './ActiveLocation';
 import { PayeesProvider } from 'loot-core/src/client/data-hooks/payees';
 import { AccountsProvider } from 'loot-core/src/client/data-hooks/accounts';
+import { isMobile } from '../util';
 
 import Titlebar, { TitlebarProvider } from './Titlebar';
 import FloatableSidebar, { SidebarProvider } from './FloatableSidebar';
@@ -221,8 +222,8 @@ function MobileNavTabs() {
 class FinancesApp extends React.Component {
   constructor(props) {
     super(props);
+    this.state = { isMobile: isMobile(window.innerWidth) };
     this.history = createBrowserHistory();
-    this.state = { isMobile: window.innerWidth < 600 };
 
     let oldPush = this.history.push;
     this.history.push = (to, state) => {
@@ -238,6 +239,15 @@ class FinancesApp extends React.Component {
 
     this.cleanup = this.history.listen(location => {
       undo.setUndoState('url', window.location.href);
+    });
+
+    this.handleWindowResize = this.handleWindowResize.bind(this);
+  }
+
+  handleWindowResize() {
+    this.setState({
+      isMobile: isMobile(window.innerWidth),
+      windowWidth: window.innerWidth
     });
   }
 
@@ -273,10 +283,13 @@ class FinancesApp extends React.Component {
         this.history
       );
     }, 100);
+
+    window.addEventListener('resize', this.handleWindowResize);
   }
 
   componentWillUnmount() {
     this.cleanup();
+    window.removeEventListener('resize', this.handleWindowResize);
   }
 
   render() {
