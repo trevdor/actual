@@ -1,5 +1,13 @@
 import React, { useMemo } from 'react';
-import { Router, Route, Redirect, Switch, useLocation } from 'react-router-dom';
+import {
+  Router,
+  Route,
+  Redirect,
+  Switch,
+  useLocation,
+  Link,
+  NavLink
+} from 'react-router-dom';
 import { createBrowserHistory } from 'history';
 import { connect } from 'react-redux';
 import { DndProvider } from 'react-dnd';
@@ -8,15 +16,17 @@ import hotkeys from 'hotkeys-js';
 import * as actions from 'loot-core/src/client/actions';
 import { SpreadsheetProvider } from 'loot-core/src/client/SpreadsheetProvider';
 import checkForUpgradeNotifications from 'loot-core/src/client/upgrade-notifications';
-import { colors } from 'loot-design/src/style';
+import { colors, styles } from 'loot-design/src/style';
 import { View } from 'loot-design/src/components/common';
 import BankSyncStatus from './BankSyncStatus';
 import { BudgetMonthCountProvider } from 'loot-design/src/components/budget/BudgetMonthCountContext';
+import Wallet from 'loot-design/src/svg/v1/Wallet';
+import PiggyBank from 'loot-design/src/svg/v1/PiggyBank';
+import Cog from 'loot-design/src/svg/v1/Cog';
 import * as undo from 'loot-core/src/platform/client/undo';
 import { PageTypeProvider } from './Page';
-import { getLocationState } from '../util/location-state';
+import { getLocationState, makeLocationState } from '../util/location-state';
 import { ActiveLocationProvider } from './ActiveLocation';
-import { makeLocationState } from '../util/location-state';
 import { PayeesProvider } from 'loot-core/src/client/data-hooks/payees';
 import { AccountsProvider } from 'loot-core/src/client/data-hooks/accounts';
 
@@ -45,6 +55,7 @@ function URLBar() {
       style={{
         position: 'absolute',
         bottom: 0,
+        left: 0,
         right: 0,
         margin: 15,
         backgroundColor: colors.n9,
@@ -77,44 +88,55 @@ function PageRoute({ path, component: Component }) {
   );
 }
 
-function Routes({ location }) {
+function Routes({ isMobile, location }) {
   return (
-    <Switch location={location}>
-      <Route path="/">
-        <Route path="/" exact render={() => <Redirect to="/budget" />} />
+    <>
+      <Switch location={location}>
+        <Route path="/">
+          <Route path="/" exact render={() => <Redirect to="/budget" />} />
 
-        <PageRoute path="/reports" component={Reports} />
-        <PageRoute path="/budget" component={Budget} />
+          <PageRoute path="/reports" component={Reports} />
+          <PageRoute path="/budget" component={Budget} />
 
-        <Route path="/schedules" exact component={Schedules} />
-        <Route path="/schedule/edit" exact component={EditSchedule} />
-        <Route path="/schedule/edit/:id" component={EditSchedule} />
-        <Route path="/schedule/link" component={LinkSchedule} />
-        <Route path="/schedule/discover" component={DiscoverSchedules} />
-        <Route
-          path="/schedule/posts-offline-notification"
-          component={PostsOfflineNotification}
-        />
+          <Route path="/schedules" exact component={Schedules} />
+          <Route path="/schedule/edit" exact component={EditSchedule} />
+          <Route path="/schedule/edit/:id" component={EditSchedule} />
+          <Route path="/schedule/link" component={LinkSchedule} />
+          <Route path="/schedule/discover" component={DiscoverSchedules} />
+          <Route
+            path="/schedule/posts-offline-notification"
+            component={PostsOfflineNotification}
+          />
 
-        <Route path="/tools/fix-splits" exact component={FixSplitsTool} />
+          <Route path="/tools/fix-splits" exact component={FixSplitsTool} />
 
-        <Route
-          path="/accounts/:id"
-          exact
-          children={props => {
-            return (
-              props.match && <Account key={props.match.params.id} {...props} />
-            );
-          }}
-        />
-        <Route path="/accounts" exact component={Account} />
-        <Route path="/settings" component={Settings} />
-      </Route>
-    </Switch>
+          <Route
+            path="/accounts/:id"
+            exact
+            children={props => {
+              return (
+                props.match && (
+                  <Account key={props.match.params.id} {...props} />
+                )
+              );
+            }}
+          />
+          <Route path="/accounts" exact component={Account} />
+          <Route path="/settings" component={Settings} />
+        </Route>
+      </Switch>
+      {isMobile && (
+        <>
+          <Route path="/budget" component={MobileNavTabs} />
+          <Route path="/accounts" component={MobileNavTabs} />
+          <Route path="/settings" component={MobileNavTabs} />
+        </>
+      )}
+    </>
   );
 }
 
-function StackedRoutes() {
+function StackedRoutes({ isMobile }) {
   let location = useLocation();
   let locationPtr = getLocationState(location, 'locationPtr');
 
@@ -129,17 +151,70 @@ function StackedRoutes() {
 
   return (
     <ActiveLocationProvider location={locations[locations.length - 1]}>
-      <Routes location={base} />
+      <Routes location={base} isMobile={isMobile} />
       {stack.map((location, idx) => (
         <PageTypeProvider
           key={location.key}
           type="modal"
           current={idx === stack.length - 1}
         >
-          <Routes location={location} />
+          <Routes location={location} isMobile={isMobile} />
         </PageTypeProvider>
       ))}
     </ActiveLocationProvider>
+  );
+}
+
+function NavTab({ icon: TabIcon, name, path }) {
+  return (
+    <NavLink
+      to={path}
+      style={{
+        alignItems: 'center',
+        color: '#8E8E8F',
+        display: 'flex',
+        flexDirection: 'column',
+        textDecoration: 'none'
+      }}
+      activeStyle={{ color: colors.p5 }}
+    >
+      <TabIcon
+        width={22}
+        height={22}
+        style={{ color: 'inherit', marginBottom: '5px' }}
+      />
+      {name}
+    </NavLink>
+  );
+}
+
+function MobileNavTabs() {
+  return (
+    <div
+      style={{
+        alignItems: 'center',
+        backgroundColor: 'white',
+        borderTop: `1px solid ${colors.n10}`,
+        bottom: 0,
+        boxShadow: styles.shadow,
+        display: 'flex',
+        flex: '1 auto',
+        height: '75px',
+        justifyContent: 'space-around',
+        position: 'absolute',
+        width: '100%',
+        zIndex: '100'
+      }}
+    >
+      <NavTab name="Budget" path="/budget" icon={Wallet} isActive={false} />
+      <NavTab
+        name="Accounts"
+        path="/accounts"
+        icon={PiggyBank}
+        isActive={false}
+      />
+      <NavTab name="Settings" path="/settings" icon={Cog} isActive={false} />
+    </div>
   );
 }
 
@@ -147,6 +222,7 @@ class FinancesApp extends React.Component {
   constructor(props) {
     super(props);
     this.history = createBrowserHistory();
+    this.state = { isMobile: window.innerWidth < 600 };
 
     let oldPush = this.history.push;
     this.history.push = (to, state) => {
@@ -210,13 +286,14 @@ class FinancesApp extends React.Component {
           <GlobalKeys />
 
           <View style={{ flexDirection: 'row', flex: 1 }}>
-            <FloatableSidebar />
+            {!this.state.isMobile && <FloatableSidebar />}
 
             <div
               style={{
                 flex: 1,
                 display: 'flex',
                 flexDirection: 'column',
+                height: '100%',
                 overflow: 'hidden',
                 position: 'relative'
               }}
@@ -242,7 +319,7 @@ class FinancesApp extends React.Component {
                 <Notifications />
                 <BankSyncStatus />
 
-                <StackedRoutes />
+                <StackedRoutes isMobile={this.state.isMobile} />
 
                 {/*window.Actual.IS_DEV && <Debugger />*/}
                 {/*window.Actual.IS_DEV && <URLBar />*/}
@@ -277,7 +354,4 @@ function FinancesAppWithContext(props) {
   );
 }
 
-export default connect(
-  null,
-  actions
-)(FinancesAppWithContext);
+export default connect(null, actions)(FinancesAppWithContext);
