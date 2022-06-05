@@ -5,7 +5,6 @@ import {
   Redirect,
   Switch,
   useLocation,
-  Link,
   NavLink
 } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
@@ -18,6 +17,7 @@ import { SpreadsheetProvider } from 'loot-core/src/client/SpreadsheetProvider';
 import checkForUpgradeNotifications from 'loot-core/src/client/upgrade-notifications';
 import { colors, styles } from 'loot-design/src/style';
 import { View } from 'loot-design/src/components/common';
+import { default as MobileAccounts } from './accounts/MobileAccounts';
 import BankSyncStatus from './BankSyncStatus';
 import { BudgetMonthCountProvider } from 'loot-design/src/components/budget/BudgetMonthCountContext';
 import Wallet from 'loot-design/src/svg/v1/Wallet';
@@ -30,7 +30,6 @@ import { ActiveLocationProvider } from './ActiveLocation';
 import { PayeesProvider } from 'loot-core/src/client/data-hooks/payees';
 import { AccountsProvider } from 'loot-core/src/client/data-hooks/accounts';
 import { isMobile } from '../util';
-
 import Titlebar, { TitlebarProvider } from './Titlebar';
 import FloatableSidebar, { SidebarProvider } from './FloatableSidebar';
 import Account from './accounts/Account';
@@ -122,17 +121,14 @@ function Routes({ isMobile, location }) {
               );
             }}
           />
-          <Route path="/accounts" exact component={Account} />
+          <Route
+            path="/accounts"
+            exact
+            component={isMobile ? MobileAccounts : Account}
+          />
           <Route path="/settings" component={Settings} />
         </Route>
       </Switch>
-      {isMobile && (
-        <>
-          <Route path="/budget" component={MobileNavTabs} />
-          <Route path="/accounts" component={MobileNavTabs} />
-          <Route path="/settings" component={MobileNavTabs} />
-        </>
-      )}
     </>
   );
 }
@@ -295,10 +291,13 @@ class FinancesApp extends React.Component {
   render() {
     return (
       <Router history={this.history}>
-        <View style={{ height: '100%', backgroundColor: colors.n10 }}>
+        <View
+          style={{ height: '100%', backgroundColor: colors.n10 }}
+          className="rabbit"
+        >
           <GlobalKeys />
 
-          <View style={{ flexDirection: 'row', flex: 1 }}>
+          <View style={{ flexDirection: 'row', flex: 1 }} className="bunny">
             {!this.state.isMobile && <FloatableSidebar />}
 
             <div
@@ -308,7 +307,8 @@ class FinancesApp extends React.Component {
                 flexDirection: 'column',
                 height: '100%',
                 overflow: 'hidden',
-                position: 'relative'
+                position: 'relative',
+                width: '100%'
               }}
             >
               <Titlebar
@@ -339,6 +339,13 @@ class FinancesApp extends React.Component {
 
                 <Modals history={this.history} />
               </div>
+              {this.state.isMobile && (
+                <>
+                  <Route path="/budget" component={MobileNavTabs} />
+                  <Route path="/accounts" component={MobileNavTabs} />
+                  <Route path="/settings" component={MobileNavTabs} />
+                </>
+              )}
             </div>
           </View>
         </View>
