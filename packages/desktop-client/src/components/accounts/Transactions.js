@@ -1,5 +1,4 @@
 import React from 'react';
-import { View, Text, SectionList, ScrollView, Animated } from 'react-native';
 import memoizeOne from 'memoize-one';
 import {
   format as formatDate,
@@ -7,7 +6,16 @@ import {
   parseISO,
   isValid as isValidDate
 } from 'date-fns';
-// import { Swipeable, RectButton } from 'react-native-gesture-handler';
+
+import { Button, TextOneLine } from 'loot-design/src/components/common';
+import { colors, styles } from 'loot-design/src/style';
+import {
+  integerToCurrency,
+  integerToAmount,
+  amountToInteger,
+  groupById,
+  titleFirst
+} from 'loot-core/src/shared/util';
 import * as monthUtils from 'loot-core/src/shared/months';
 import {
   splitTransaction,
@@ -16,37 +24,30 @@ import {
   deleteTransaction,
   realizeTempTransactions
 } from 'loot-core/src/shared/transactions';
-import { applyChanges, titleFirst } from 'loot-core/src/shared/util';
-import {
-  integerToCurrency,
-  integerToAmount,
-  amountToInteger,
-  groupById
-} from 'loot-core/src/shared/util';
-import KeyboardAvoidingView from './KeyboardAvoidingView';
-import { ListItem } from './table';
-import { Button, TextOneLine } from './common';
-import { colors, mobileStyles as styles } from '../../style';
-import Add from '../../svg/v1/Add';
-import Trash from '../../svg/v1/Trash';
-import PencilWriteAlternate from '../../svg/v2/PencilWriteAlternate';
-import { FocusableAmountInput } from './AmountInput';
-import ExitTransition from 'ExitTransition';
-import {
-  FieldLabel,
-  InputField,
-  TapField,
-  BooleanField,
-  EDITING_PADDING
-} from './forms';
+
+import Text from 'loot-design/src/components/Text';
+import View from 'loot-design/src/components/View';
+import { FocusableAmountInput } from 'loot-design/src/components/mobile/AmountInput';
+import ExitTransition from 'loot-design/src/components/mobile/ExitTransition';
+import { ListItem } from 'loot-design/src/components/mobile/table';
 
 import EditSkull1 from '../../svg/v2/EditSkull1';
 import AlertTriangle from '../../svg/v2/AlertTriangle';
+import Add from 'loot-design/src/svg/v2/Add.mobile';
+import Trash from 'loot-design/src/svg/v1/Trash.mobile';
+import PencilWriteAlternate from 'loot-design/src/svg/v2/PencilWriteAlternate.mobile';
 import CalendarIcon from '../../svg/v2/Calendar';
 import ValidationCheck from '../../svg/v2/ValidationCheck';
 import FavoriteStar from '../../svg/v2/FavoriteStar';
 import CheckCircle1 from '../../svg/v2/CheckCircle1';
 import ArrowsSynchronize from 'loot-design/src/svg/v2/ArrowsSynchronize';
+import {
+  BooleanField,
+  EDITING_PADDING,
+  FieldLabel,
+  InputField,
+  TapField
+} from '../forms';
 
 let getPayeesById = memoizeOne(payees => groupById(payees));
 let getAccountsById = memoizeOne(accounts => groupById(accounts));
@@ -306,15 +307,15 @@ export class TransactionEdit extends React.Component {
       outputRange: [-6, -5, -5, 20]
     });
     return (
-      <RectButton
-        onPress={this.close}
+      <button
+        onClick={this.close}
         style={{
           flex: 1,
           justifyContent: 'center',
           backgroundColor: colors.r4
         }}
       >
-        <Animated.Text
+        <Text
           style={{
             color: 'white',
             textAlign: 'right',
@@ -322,8 +323,8 @@ export class TransactionEdit extends React.Component {
           }}
         >
           Delete
-        </Animated.Text>
-      </RectButton>
+        </Text>
+      </button>
     );
   };
 
@@ -362,322 +363,303 @@ export class TransactionEdit extends React.Component {
     );
 
     return (
-      <KeyboardAvoidingView>
-        <View
-          style={{
-            margin: 10,
-            marginTop: 3,
-            backgroundColor: 'white',
-            flex: 1,
-            borderRadius: 4,
+      //   <KeyboardAvoidingView>
+      <View
+        style={{
+          margin: 10,
+          marginTop: 3,
+          backgroundColor: 'white',
+          flex: 1,
+          borderRadius: 4,
 
-            // This shadow make the card "pop" off of the screen below
-            // it
-            shadowColor: colors.n3,
-            shadowOffset: { width: 0, height: 0 },
-            shadowRadius: 4,
-            shadowOpacity: 1
-          }}
-        >
-          <View style={{ borderRadius: 4, overflow: 'hidden', flex: 1 }}>
-            <View
-              style={{
-                borderBottomWidth: 1,
-                borderColor: colors.n9,
-                flexDirection: 'row',
-                justifyContent: 'center',
-                padding: 15
-              }}
+          // This shadow make the card "pop" off of the screen below
+          // it
+          shadowColor: colors.n3,
+          shadowOffset: { width: 0, height: 0 },
+          shadowRadius: 4,
+          shadowOpacity: 1
+        }}
+      >
+        <View style={{ borderRadius: 4, overflow: 'hidden', flex: 1 }}>
+          <View
+            style={{
+              borderBottomWidth: 1,
+              borderColor: colors.n9,
+              flexDirection: 'row',
+              justifyContent: 'center',
+              padding: 15
+            }}
+          >
+            <TextOneLine
+              centered={true}
+              style={[styles.header.headerTitleStyle, { marginHorizontal: 30 }]}
             >
-              <TextOneLine
-                centered={true}
-                style={[
-                  styles.header.headerTitleStyle,
-                  { marginHorizontal: 30 }
-                ]}
-              >
-                {payeeId == null
-                  ? adding
-                    ? 'New Transaction'
-                    : 'Transaction'
-                  : descriptionPretty}
-              </TextOneLine>
-            </View>
+              {payeeId == null
+                ? adding
+                  ? 'New Transaction'
+                  : 'Transaction'
+                : descriptionPretty}
+            </TextOneLine>
+          </View>
 
-            <ScrollView
-              ref={el => (this.scrollView = el)}
-              automaticallyAdjustContentInsets={false}
-              keyboardShouldPersistTaps="always"
-              style={{
-                backgroundColor: colors.n11,
-                flexGrow: 1,
-                overflow: 'hidden'
+          {/* <ScrollView
+            ref={el => (this.scrollView = el)}
+            automaticallyAdjustContentInsets={false}
+            keyboardShouldPersistTaps="always"
+            style={{
+              backgroundColor: colors.n11,
+              flexGrow: 1,
+              overflow: 'hidden'
+            }}
+            contentContainerStyle={{ flexGrow: 1 }}
+          > */}
+          <View
+            style={{
+              alignItems: 'center',
+              marginVertical: 20
+            }}
+          >
+            <FieldLabel
+              title="Amount"
+              flush
+              style={{ marginBottom: 0, paddingLeft: 0 }}
+            />
+            <FocusableAmountInput
+              ref={el => (this.amount = el)}
+              value={transaction.amount}
+              zeroIsNegative={true}
+              onBlur={value =>
+                this.onEdit(transaction, 'amount', value.toString())
+              }
+              onChange={value =>
+                this.onQueueChange(transaction, 'amount', value)
+              }
+              style={{ height: 37, transform: [] }}
+              focusedStyle={{
+                width: 'auto',
+                paddingVertical: 0,
+                paddingHorizontal: 10,
+                minWidth: 120,
+                transform: [{ translateY: -0.5 }]
               }}
-              contentContainerStyle={{ flexGrow: 1 }}
-            >
-              <View
-                style={{
-                  alignItems: 'center',
-                  marginVertical: 20
-                }}
-              >
-                <FieldLabel
-                  title="Amount"
-                  flush
-                  style={{ marginBottom: 0, paddingLeft: 0 }}
-                />
-                <FocusableAmountInput
-                  ref={el => (this.amount = el)}
-                  value={transaction.amount}
-                  zeroIsNegative={true}
-                  onBlur={value =>
-                    this.onEdit(transaction, 'amount', value.toString())
-                  }
-                  onChange={value =>
-                    this.onQueueChange(transaction, 'amount', value)
-                  }
-                  style={{ height: 37, transform: [] }}
-                  focusedStyle={{
-                    width: 'auto',
-                    paddingVertical: 0,
-                    paddingHorizontal: 10,
-                    minWidth: 120,
-                    transform: [{ translateY: -0.5 }]
-                  }}
-                  textStyle={{ fontSize: 30, textAlign: 'center' }}
-                />
-              </View>
+              textStyle={{ fontSize: 30, textAlign: 'center' }}
+            />
+          </View>
 
-              <FieldLabel title="Payee" flush />
+          <FieldLabel title="Payee" flush />
+          <TapField
+            value={descriptionPretty}
+            onTap={() => this.onTap(transaction.id, 'payee')}
+          />
+
+          <View>
+            <FieldLabel
+              title={transaction.is_parent ? 'Categories (split)' : 'Category'}
+            />
+            {!transaction.is_parent ? (
               <TapField
-                value={descriptionPretty}
-                onTap={() => this.onTap(transaction.id, 'payee')}
+                value={category ? lookupName(categories, category) : null}
+                disabled={(account && !!account.offbudget) || transferAcct}
+                rightContent={
+                  <Button
+                    contentStyle={{
+                      paddingVertical: 4,
+                      paddingHorizontal: 15,
+                      margin: 0
+                    }}
+                    onPress={this.onSplit}
+                  >
+                    Split
+                  </Button>
+                }
+                onTap={() => this.onTap(transaction.id, 'category')}
               />
-
+            ) : (
               <View>
-                <FieldLabel
-                  title={
-                    transaction.is_parent ? 'Categories (split)' : 'Category'
-                  }
-                />
-                {!transaction.is_parent ? (
-                  <TapField
-                    value={category ? lookupName(categories, category) : null}
-                    disabled={(account && !!account.offbudget) || transferAcct}
-                    rightContent={
-                      <Button
-                        contentStyle={{
-                          paddingVertical: 4,
-                          paddingHorizontal: 15,
-                          margin: 0
-                        }}
-                        onPress={this.onSplit}
-                      >
-                        Split
-                      </Button>
-                    }
-                    onTap={() => this.onTap(transaction.id, 'category')}
-                  />
-                ) : (
-                  <View>
-                    {childTransactions.map((child, idx) => {
-                      const isLast = idx === childTransactions.length - 1;
-                      return (
-                        <Swipeable
-                          key={child.id}
-                          renderRightActions={this.renderActions}
-                          onSwipeableRightOpen={() => this.onDeleteSplit(child)}
-                          rightThreshold={100}
-                        >
-                          <TapField
-                            value={
-                              child.category
-                                ? lookupName(categories, child.category)
-                                : null
+                {childTransactions.map((child, idx) => {
+                  const isLast = idx === childTransactions.length - 1;
+                  return (
+                    // <Swipeable
+                    //   key={child.id}
+                    //   renderRightActions={this.renderActions}
+                    //   onSwipeableRightOpen={() => this.onDeleteSplit(child)}
+                    //   rightThreshold={100}
+                    // >
+                    <TapField
+                      value={
+                        child.category
+                          ? lookupName(categories, child.category)
+                          : null
+                      }
+                      rightContent={
+                        <FocusableAmountInput
+                          ref={
+                            isLast ? el => (this.lastChildAmount = el) : null
+                          }
+                          value={child.amount}
+                          sign={forcedSign}
+                          scrollIntoView={true}
+                          buttonProps={{
+                            paddingVertical: 5,
+                            style: {
+                              width: 80,
+                              alignItems: 'flex-end'
                             }
-                            rightContent={
-                              <FocusableAmountInput
-                                ref={
-                                  isLast
-                                    ? el => (this.lastChildAmount = el)
-                                    : null
-                                }
-                                value={child.amount}
-                                sign={forcedSign}
-                                scrollIntoView={true}
-                                buttonProps={{
-                                  paddingVertical: 5,
-                                  style: {
-                                    width: 80,
-                                    alignItems: 'flex-end'
-                                  }
-                                }}
-                                textStyle={{ fontSize: 14 }}
-                                onBlur={value =>
-                                  this.onEdit(child, 'amount', value.toString())
-                                }
-                              />
-                            }
-                            style={{ marginTop: idx === 0 ? 0 : -1 }}
-                            onTap={() => this.openChildEdit(child)}
-                          />
-                        </Swipeable>
-                      );
-                    })}
+                          }}
+                          textStyle={{ fontSize: 14 }}
+                          onBlur={value =>
+                            this.onEdit(child, 'amount', value.toString())
+                          }
+                        />
+                      }
+                      style={{ marginTop: idx === 0 ? 0 : -1 }}
+                      onTap={() => this.openChildEdit(child)}
+                    />
+                    // </Swipeable>
+                  );
+                })}
 
-                    <View
-                      style={{
-                        alignItems: 'flex-end',
-                        marginRight: EDITING_PADDING,
-                        paddingTop: 10
-                      }}
-                    >
-                      {transaction.error && (
-                        <Text style={{ marginBottom: 10 }}>
-                          Remaining:{' '}
-                          {integerToCurrency(transaction.error.difference)}
-                        </Text>
-                      )}
-                      <Button
-                        contentStyle={{
-                          paddingVertical: 6,
-                          paddingHorizontal: 15
-                        }}
-                        onPress={this.onAddSplit}
-                      >
-                        Add split
-                      </Button>
-                    </View>
-                  </View>
-                )}
-              </View>
-
-              <FieldLabel title="Account" />
-              <TapField
-                disabled={!adding}
-                value={account ? account.name : null}
-                onTap={() => this.onTap(transaction.id, 'account')}
-              />
-
-              <View style={{ flexDirection: 'row' }}>
-                <View style={{ flex: 1 }}>
-                  <FieldLabel title="Date" />
-                  <InputField
-                    defaultValue={transaction.date}
-                    onUpdate={value => this.onEdit(transaction, 'date', value)}
-                    onChange={e =>
-                      this.onQueueChange(
-                        transaction,
-                        'date',
-                        e.nativeEvent.text
-                      )
-                    }
-                  />
-                </View>
-
-                <View style={{ marginHorizontal: 35 }}>
-                  <FieldLabel title="Cleared" />
-                  <BooleanField
-                    value={transaction.cleared}
-                    onUpdate={value =>
-                      this.onEdit(transaction, 'cleared', value)
-                    }
-                    style={{ marginTop: 4 }}
-                  />
+                <View
+                  style={{
+                    alignItems: 'flex-end',
+                    marginRight: EDITING_PADDING,
+                    paddingTop: 10
+                  }}
+                >
+                  {transaction.error && (
+                    <Text style={{ marginBottom: 10 }}>
+                      Remaining:{' '}
+                      {integerToCurrency(transaction.error.difference)}
+                    </Text>
+                  )}
+                  <button
+                    style={{
+                      padding: '6px 15px'
+                    }}
+                    onClick={this.onAddSplit}
+                  >
+                    Add split
+                  </button>
                 </View>
               </View>
+            )}
+          </View>
 
-              <FieldLabel title="Notes" />
+          <FieldLabel title="Account" />
+          <TapField
+            disabled={!adding}
+            value={account ? account.name : null}
+            onTap={() => this.onTap(transaction.id, 'account')}
+          />
+
+          <View style={{ flexDirection: 'row' }}>
+            <View style={{ flex: 1 }}>
+              <FieldLabel title="Date" />
               <InputField
-                defaultValue={transaction.notes}
-                onUpdate={value => this.onEdit(transaction, 'notes', value)}
+                defaultValue={transaction.date}
+                onUpdate={value => this.onEdit(transaction, 'date', value)}
                 onChange={e =>
-                  this.onQueueChange(transaction, 'notes', e.nativeEvent.text)
+                  this.onQueueChange(transaction, 'date', e.nativeEvent.text)
                 }
               />
-
-              {!adding && (
-                <View style={{ alignItems: 'center' }}>
-                  <Button
-                    onPress={() => onDelete()}
-                    style={{
-                      paddingVertical: 5,
-                      marginHorizontal: EDITING_PADDING,
-                      marginTop: 20,
-                      marginBottom: 15,
-                      backgroundColor: 'transparent'
-                    }}
-                    contentStyle={{ borderWidth: 0 }}
-                  >
-                    <Trash
-                      width={17}
-                      height={17}
-                      style={{ color: colors.r4 }}
-                    />
-                    <Text style={{ color: colors.r4, marginLeft: 5 }}>
-                      Delete transaction
-                    </Text>
-                  </Button>
-                </View>
-              )}
-            </ScrollView>
-
-            <View
-              style={{
-                paddingHorizontal: EDITING_PADDING,
-                paddingVertical: 15,
-                backgroundColor: colors.n11,
-                borderTopWidth: 1,
-                borderColor: colors.n10
-              }}
-            >
-              {adding ? (
-                <Button onPress={() => this.onAdd()}>
-                  <Add width={17} height={17} style={{ color: colors.b3 }} />
-                  <Text
-                    style={[styles.text, { color: colors.b3, marginLeft: 5 }]}
-                  >
-                    Add transaction
-                  </Text>
-                </Button>
-              ) : (
-                <Button onPress={() => this.onSave()}>
-                  <PencilWriteAlternate
-                    style={{ width: 16, height: 16, color: colors.n1 }}
-                  />
-                  <Text
-                    style={[styles.text, { marginLeft: 6, color: colors.n1 }]}
-                  >
-                    Save changes
-                  </Text>
-                </Button>
-              )}
             </View>
 
-            <ExitTransition
-              alive={editingChild}
-              withProps={{
-                transaction:
-                  editingChild && transactions.find(t => t.id === editingChild)
-              }}
-            >
-              {(exiting, onDone, { transaction }) =>
-                renderChildEdit({
-                  transaction,
-                  exiting,
-                  amountSign: forcedSign,
-                  getCategoryName: id =>
-                    id ? lookupName(categories, id) : null,
-                  navigation: navigation,
-                  onEdit: this.onEdit,
-                  onStartClose: this.onSaveChild,
-                  onClose: onDone
-                })
-              }
-            </ExitTransition>
+            <View style={{ marginHorizontal: 35 }}>
+              <FieldLabel title="Cleared" />
+              <BooleanField
+                value={transaction.cleared}
+                onUpdate={value => this.onEdit(transaction, 'cleared', value)}
+                style={{ marginTop: 4 }}
+              />
+            </View>
           </View>
+
+          <FieldLabel title="Notes" />
+          <InputField
+            defaultValue={transaction.notes}
+            onUpdate={value => this.onEdit(transaction, 'notes', value)}
+            onChange={e =>
+              this.onQueueChange(transaction, 'notes', e.nativeEvent.text)
+            }
+          />
+
+          {!adding && (
+            <View style={{ alignItems: 'center' }}>
+              <Button
+                onPress={() => onDelete()}
+                style={{
+                  paddingVertical: 5,
+                  marginHorizontal: EDITING_PADDING,
+                  marginTop: 20,
+                  marginBottom: 15,
+                  backgroundColor: 'transparent'
+                }}
+                contentStyle={{ borderWidth: 0 }}
+              >
+                <Trash width={17} height={17} style={{ color: colors.r4 }} />
+                <Text style={{ color: colors.r4, marginLeft: 5 }}>
+                  Delete transaction
+                </Text>
+              </Button>
+            </View>
+          )}
+          {/* </ScrollView> */}
+
+          <View
+            style={{
+              paddingHorizontal: EDITING_PADDING,
+              paddingVertical: 15,
+              backgroundColor: colors.n11,
+              borderTopWidth: 1,
+              borderColor: colors.n10
+            }}
+          >
+            {adding ? (
+              <Button onPress={() => this.onAdd()}>
+                <Add width={17} height={17} style={{ color: colors.b3 }} />
+                <Text
+                  style={[styles.text, { color: colors.b3, marginLeft: 5 }]}
+                >
+                  Add transaction
+                </Text>
+              </Button>
+            ) : (
+              <Button onPress={() => this.onSave()}>
+                <PencilWriteAlternate
+                  style={{ width: 16, height: 16, color: colors.n1 }}
+                />
+                <Text
+                  style={[styles.text, { marginLeft: 6, color: colors.n1 }]}
+                >
+                  Save changes
+                </Text>
+              </Button>
+            )}
+          </View>
+
+          <ExitTransition
+            alive={editingChild}
+            withProps={{
+              transaction:
+                editingChild && transactions.find(t => t.id === editingChild)
+            }}
+          >
+            {(exiting, onDone, { transaction }) =>
+              renderChildEdit({
+                transaction,
+                exiting,
+                amountSign: forcedSign,
+                getCategoryName: id => (id ? lookupName(categories, id) : null),
+                navigation: navigation,
+                onEdit: this.onEdit,
+                onStartClose: this.onSaveChild,
+                onClose: onDone
+              })
+            }
+          </ExitTransition>
         </View>
-      </KeyboardAvoidingView>
+      </View>
+      //   </KeyboardAvoidingView>
     );
   }
 }
@@ -790,10 +772,9 @@ export class Transaction extends React.PureComponent {
     ];
 
     return (
-      <RectButton
-        onPress={() => onSelect(transaction)}
-        style={{ backgroundColor: 'white' }}
-        activeOpacity={0.1}
+      <button
+        onClick={() => onSelect(transaction)}
+        style={{ backgroundColor: 'white', '&:active': { opacity: 0.1 } }}
       >
         <ListItem
           style={[
@@ -867,7 +848,7 @@ export class Transaction extends React.PureComponent {
             {integerToCurrency(amount)}
           </Text>
         </ListItem>
-      </RectButton>
+      </button>
     );
   }
 }
