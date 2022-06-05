@@ -8,3 +8,12 @@ export function isMobile(width) {
   const containerWidth = width || window.innerWidth;
   return containerWidth < 600;
 }
+
+export function groupById(data) {
+  let res = {};
+  for (let i = 0; i < data.length; i++) {
+    let item = data[i];
+    res[item.id] = item;
+  }
+  return res;
+}

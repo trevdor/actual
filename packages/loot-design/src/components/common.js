@@ -39,6 +39,14 @@ export View from './View';
 export Text from './Text';
 export Stack from './Stack';
 
+export function TextOneLine({ children, centered, ...props }) {
+  return (
+    <Text numberOfLines={1} {...props}>
+      {children}
+    </Text>
+  );
+}
+
 export const useStableCallback = callback => {
   const callbackRef = useRef();
   const memoCallback = useCallback(
