@@ -1,7 +1,17 @@
 import React from 'react';
-import { View, Text, TextInput, Switch } from 'react-native';
-import { RectButton } from 'react-native-gesture-handler';
-import { colors } from '../../style';
+// import { Switch } from 'react-native';
+import { useSwitch } from '@react-aria/switch';
+import { VisuallyHidden } from '@react-aria/visually-hidden';
+import { useToggleState } from '@react-stately/toggle';
+import { useFocusRing } from '@react-aria/focus';
+
+import {
+  Button,
+  Text,
+  // TextInput,
+  View
+} from 'loot-design/src/components/common';
+import { colors } from 'loot-design/src/style';
 
 export const EDITING_PADDING = 12;
 export const FIELD_HEIGHT = 40;
@@ -40,7 +50,7 @@ export const InputField = React.forwardRef(function InputField(
   ref
 ) {
   return (
-    <TextInput
+    <input // TextInput
       ref={ref}
       autoCorrect={false}
       autoCapitalize="none"
@@ -68,8 +78,8 @@ export function TapField({
   onTap
 }) {
   return (
-    <RectButton
-      onPress={!disabled && onTap}
+    <Button
+      onClick={!disabled && onTap}
       style={{ backgroundColor: 'white' }}
       activeOpacity={0.05}
     >
@@ -88,7 +98,7 @@ export function TapField({
         )}
         {!disabled && rightContent}
       </View>
-    </RectButton>
+    </Button>
   );
 }
 
@@ -104,5 +114,44 @@ export function BooleanField({ value, onUpdate, style }) {
         style
       ]}
     />
+  );
+}
+
+function Switch(props) {
+  let state = useToggleState(props);
+  let ref = React.useRef();
+  let { inputProps } = useSwitch(props, state, ref);
+  let { isFocusVisible, focusProps } = useFocusRing();
+
+  return (
+    <label style={{ display: 'flex', alignItems: 'center' }}>
+      <VisuallyHidden>
+        <input {...inputProps} {...focusProps} ref={ref} />
+      </VisuallyHidden>
+      <svg width={40} height={24} aria-hidden="true" style={{ marginRight: 4 }}>
+        <rect
+          x={4}
+          y={4}
+          width={32}
+          height={16}
+          rx={8}
+          fill={state.isSelected ? 'orange' : 'gray'}
+        />
+        <circle cx={state.isSelected ? 28 : 12} cy={12} r={5} fill="white" />
+        {isFocusVisible && (
+          <rect
+            x={1}
+            y={1}
+            width={38}
+            height={22}
+            rx={11}
+            fill="none"
+            stroke="orange"
+            strokeWidth={2}
+          />
+        )}
+      </svg>
+      {props.children}
+    </label>
   );
 }

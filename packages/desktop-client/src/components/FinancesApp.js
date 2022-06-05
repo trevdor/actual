@@ -124,7 +124,7 @@ function Routes({ isMobile, location }) {
           <Route
             path="/accounts"
             exact
-            component={isMobile ? Account : MobileAccounts}
+            component={isMobile ? MobileAccounts : Account}
           />
           <Route path="/settings" component={Settings} />
         </Route>

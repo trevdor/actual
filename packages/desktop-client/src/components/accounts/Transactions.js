@@ -27,19 +27,19 @@ import {
 
 import Text from 'loot-design/src/components/Text';
 import View from 'loot-design/src/components/View';
-import { FocusableAmountInput } from 'loot-design/src/components/mobile/AmountInput';
+import { AmountInput } from '../util/AmountInput';
 import ExitTransition from 'loot-design/src/components/mobile/ExitTransition';
 import { ListItem } from 'loot-design/src/components/mobile/table';
 
-import EditSkull1 from '../../svg/v2/EditSkull1';
-import AlertTriangle from '../../svg/v2/AlertTriangle';
-import Add from 'loot-design/src/svg/v2/Add.mobile';
-import Trash from 'loot-design/src/svg/v1/Trash.mobile';
-import PencilWriteAlternate from 'loot-design/src/svg/v2/PencilWriteAlternate.mobile';
-import CalendarIcon from '../../svg/v2/Calendar';
-import ValidationCheck from '../../svg/v2/ValidationCheck';
-import FavoriteStar from '../../svg/v2/FavoriteStar';
-import CheckCircle1 from '../../svg/v2/CheckCircle1';
+import EditSkull1 from 'loot-design/src/svg/v2/EditSkull1';
+import AlertTriangle from 'loot-design/src/svg/v2/AlertTriangle';
+import Add from 'loot-design/src/svg/v1/Add';
+import Trash from 'loot-design/src/svg/v1/Trash';
+import PencilWriteAlternate from 'loot-design/src/svg/v2/PencilWriteAlternate';
+import CalendarIcon from 'loot-design/src/svg/v2/Calendar';
+import ValidationCheck from 'loot-design/src/svg/v2/ValidationCheck';
+import FavoriteStar from 'loot-design/src/svg/v2/FavoriteStar';
+import CheckCircle1 from 'loot-design/src/svg/v2/CheckCircle1';
 import ArrowsSynchronize from 'loot-design/src/svg/v2/ArrowsSynchronize';
 import {
   BooleanField,
@@ -48,6 +48,15 @@ import {
   InputField,
   TapField
 } from '../forms';
+
+import { useListBox, useOption } from '@react-aria/listbox';
+import { useListState } from '@react-stately/list';
+import { Item } from '@react-stately/collections';
+import { useFocusRing } from '@react-aria/focus';
+import { mergeProps } from '@react-aria/utils';
+import { Section } from '@react-stately/collections';
+import { useListBoxSection } from '@react-aria/listbox';
+import { useSeparator } from '@react-aria/separator';
 
 let getPayeesById = memoizeOne(payees => groupById(payees));
 let getAccountsById = memoizeOne(accounts => groupById(accounts));
@@ -424,7 +433,7 @@ export class TransactionEdit extends React.Component {
               flush
               style={{ marginBottom: 0, paddingLeft: 0 }}
             />
-            <FocusableAmountInput
+            <AmountInput
               ref={el => (this.amount = el)}
               value={transaction.amount}
               zeroIsNegative={true}
@@ -492,7 +501,7 @@ export class TransactionEdit extends React.Component {
                           : null
                       }
                       rightContent={
-                        <FocusableAmountInput
+                        <AmountInput
                           ref={
                             isLast ? el => (this.lastChildAmount = el) : null
                           }
@@ -913,22 +922,143 @@ export class TransactionList extends React.Component {
     } = this.props;
 
     return (
-      <SectionList
-        style={[{ flex: 1 }, style]}
-        {...scrollProps}
-        ListHeaderComponent={
-          // Support pull to refresh by making sure it's always
-          // appended and composing the props
-          <React.Fragment>{scrollProps.ListHeaderComponent}</React.Fragment>
-        }
-        renderItem={this.renderItem}
-        renderSectionHeader={this.renderSection}
-        sections={this.makeData(transactions)}
-        keyExtractor={item => item.id}
-        refreshControl={refreshControl}
-        onEndReachedThreshold={0.5}
-        onEndReached={onLoadMore}
-      />
+      //   <SectionList
+      //     style={[{ flex: 1 }, style]}
+      //     {...scrollProps}
+      //     ListHeaderComponent={
+      //       // Support pull to refresh by making sure it's always
+      //       // appended and composing the props
+      //       <React.Fragment>{scrollProps.ListHeaderComponent}</React.Fragment>
+      //     }
+      //     renderItem={this.renderItem}
+      //     renderSectionHeader={this.renderSection}
+      //     sections={this.makeData(transactions)}
+      //     keyExtractor={item => item.id}
+      //     refreshControl={refreshControl}
+      //     onEndReachedThreshold={0.5}
+      //     onEndReached={onLoadMore}
+      //   />
+      <ListBox label="Choose an option" selectionMode="multiple">
+        <Section title="Section 1">
+          <Item>One</Item>
+          <Item>Two</Item>
+          <Item>Three</Item>
+        </Section>
+        <Section title="Section 2">
+          <Item>One</Item>
+          <Item>Two</Item>
+          <Item>Three</Item>
+        </Section>
+      </ListBox>
     );
   }
+}
+
+function ListBox(props) {
+  let state = useListState(props);
+  let ref = React.useRef();
+  let { listBoxProps, labelProps } = useListBox(props, state, ref);
+
+  return (
+    <>
+      <div {...labelProps}>{props.label}</div>
+      <ul
+        {...listBoxProps}
+        ref={ref}
+        style={{
+          padding: 0,
+          margin: '5px 0',
+          listStyle: 'none',
+          border: '1px solid gray',
+          maxWidth: 250
+        }}
+      >
+        {[...state.collection].map(item => (
+          <ListBoxSection key={item.key} section={item} state={state} />
+        ))}
+      </ul>
+    </>
+  );
+}
+
+function ListBoxSection({ section, state }) {
+  let { itemProps, headingProps, groupProps } = useListBoxSection({
+    heading: section.rendered,
+    'aria-label': section['aria-label']
+  });
+
+  let { separatorProps } = useSeparator({
+    elementType: 'li'
+  });
+
+  // If the section is not the first, add a separator element.
+  // The heading is rendered inside an <li> element, which contains
+  // a <ul> with the child items.
+  return (
+    <>
+      {section.key !== state.collection.getFirstKey() && (
+        <li
+          {...separatorProps}
+          style={{
+            borderTop: '1px solid gray',
+            margin: '2px 5px'
+          }}
+        />
+      )}
+      <li {...itemProps}>
+        {section.rendered && (
+          <span
+            {...headingProps}
+            style={{
+              fontWeight: 'bold',
+              fontSize: '1.1em',
+              padding: '2px 5px'
+            }}
+          >
+            {section.rendered}
+          </span>
+        )}
+        <ul
+          {...groupProps}
+          style={{
+            padding: 0,
+            listStyle: 'none'
+          }}
+        >
+          {[...section.childNodes].map(node => (
+            <Option key={node.key} item={node} state={state} />
+          ))}
+        </ul>
+      </li>
+    </>
+  );
+}
+
+function Option({ item, state }) {
+  // Get props for the option element
+  let ref = React.useRef();
+  let { optionProps, isSelected, isDisabled } = useOption(
+    { key: item.key },
+    state,
+    ref
+  );
+
+  // Determine whether we should show a keyboard
+  // focus ring for accessibility
+  let { isFocusVisible, focusProps } = useFocusRing();
+
+  return (
+    <li
+      {...mergeProps(optionProps, focusProps)}
+      ref={ref}
+      style={{
+        background: isSelected ? 'blueviolet' : 'transparent',
+        color: isSelected ? 'white' : null,
+        padding: '2px 5px',
+        outline: isFocusVisible ? '2px solid orange' : 'none'
+      }}
+    >
+      {item.rendered}
+    </li>
+  );
 }

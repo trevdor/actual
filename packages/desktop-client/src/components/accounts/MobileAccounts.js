@@ -3,10 +3,9 @@ import { connect } from 'react-redux';
 import { prettyAccountType } from 'loot-core/src/shared/accounts';
 import Wallet from 'loot-design/src/svg/v1/Wallet';
 import { colors, mobileStyles as styles } from 'loot-design/src/style';
-import { TextOneLine } from 'loot-design/src/components/common';
+import { Text, TextOneLine, View } from 'loot-design/src/components/common';
 import { TransactionList } from './Transactions';
 import CellValue from 'loot-design/src/components/spreadsheet/CellValue';
-import { Text, View } from 'loot-design/src/components';
 import * as actions from 'loot-core/src/client/actions';
 import * as queries from 'loot-core/src/client/queries';
 
