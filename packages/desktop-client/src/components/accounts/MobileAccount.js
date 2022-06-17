@@ -15,7 +15,8 @@ import {
   withRouter,
   useParams,
   useHistory,
-  useLocation
+  useLocation,
+  Link
 } from 'react-router-dom';
 import { css } from 'glamor';
 import Modal from 'react-modal';
@@ -34,7 +35,8 @@ import {
   Tooltip,
   Menu,
   Block,
-  Stack
+  Stack,
+  Label
 } from 'loot-design/src/components/common';
 import {
   currencyToInteger,
@@ -52,8 +54,9 @@ import Add from 'loot-design/src/svg/v1/Add';
 import format from 'loot-design/src/components/spreadsheet/format';
 import useSheetValue from 'loot-design/src/components/spreadsheet/useSheetValue';
 import CellValue from 'loot-design/src/components/spreadsheet/CellValue';
-import ArrowButtonRight1 from 'loot-design/src/svg/v2/ArrowButtonRight1';
+import ArrowButtonDown1 from 'loot-design/src/svg/v2/ArrowButtonDown1';
 import CheveronDown from 'loot-design/src/svg/v1/CheveronDown';
+import CheveronLeft from 'loot-design/src/svg/v1/CheveronLeft';
 import CheckCircle1 from 'loot-design/src/svg/v2/CheckCircle1';
 import Loading from 'loot-design/src/svg/v1/AnimatedLoading';
 import ArrowsExpand3 from 'loot-design/src/svg/v2/ArrowsExpand3';
@@ -321,7 +324,6 @@ function DetailedBalance({ name, balance }) {
     <Text
       style={{
         marginLeft: 15,
-        backgroundColor: colors.n10,
         borderRadius: 4,
         padding: '4px 6px',
         color: colors.n5
@@ -390,40 +392,41 @@ function Balances({ balanceQuery, showExtraBalances, onToggleExtraBalances }) {
   return (
     <View
       style={{
-        flexDirection: 'row',
+        flexDirection: 'column',
         alignItems: 'center',
-        marginTop: -5,
-        marginLeft: -5
+        justifyContent: 'center',
+        marginTop: 10,
+        marginBottom: 10,
+        width: '100%'
       }}
     >
+      <Label title="BALANCE" />
       <Button
         bare
         onClick={onToggleExtraBalances}
-        style={{
-          '& svg': {
-            opacity: selectedItems.size > 0 || showExtraBalances ? 1 : 0
-          },
-          '&:hover svg': { opacity: 1 }
-        }}
+        // style={{
+        //   '& svg': {
+        //     opacity: selectedItems.size > 0 || showExtraBalances ? 1 : 0
+        //   },
+        // }}
       >
         <CellValue
           binding={{ ...balanceQuery, value: 0 }}
           type="financial"
-          style={{ fontSize: 22, fontWeight: 400 }}
+          style={{ fontSize: 16, fontWeight: 400 }}
           getStyle={value => ({
             color: value < 0 ? colors.r5 : value > 0 ? colors.g5 : colors.n8
           })}
         />
-
-        <ArrowButtonRight1
+        {/* <ArrowButtonDown1
           style={{
             width: 10,
             height: 10,
             marginLeft: 10,
-            color: colors.n5,
-            transform: showExtraBalances ? 'rotateZ(180deg)' : 'rotateZ(0)'
+            color: colors.n5
+            // transform: showExtraBalances ? 'rotateZ(180deg)' : 'rotateZ(0)'
           }}
-        />
+        /> */}
       </Button>
       {showExtraBalances && <MoreBalances balanceQuery={balanceQuery} />}
 
@@ -676,56 +679,96 @@ const AccountHeader = React.memo(
         <View
           style={[styles.pageContent, { paddingBottom: 10, flexShrink: 0 }]}
         >
-          <View style={{ marginTop: 2, alignItems: 'flex-start' }}>
-            <View>
-              {editingName ? (
-                <InitialFocus>
-                  <Input
-                    defaultValue={accountName}
-                    onEnter={e => onSaveName(e.target.value)}
-                    onBlur={() => onExposeName(false)}
-                    style={{
-                      fontSize: 25,
-                      fontWeight: 500,
-                      marginTop: -5,
-                      marginBottom: -2,
-                      marginLeft: -5
-                    }}
-                  />
-                </InitialFocus>
-              ) : isNameEditable ? (
-                <Button
-                  bare
+          <View
+            style={{
+              flexDirection: 'row',
+              height: 24,
+              justifyContent: 'space-between',
+              width: '100%'
+            }}
+          >
+            <Link
+              to="/accounts"
+              style={{
+                alignItems: 'center',
+                alignSelf: 'flex-start',
+                color: colors.b6,
+                display: 'flex',
+                left: 0,
+                position: 'relative',
+                textDecoration: 'none',
+                top: 0,
+                width: 65
+              }}
+            >
+              <CheveronLeft
+                style={{
+                  color: colors.b6,
+                  width: 24,
+                  height: 24
+                }}
+              />
+              <Text style={{ fontSize: 16, fontWeight: 400 }}>Back</Text>
+            </Link>
+            {editingName ? (
+              <InitialFocus>
+                <Input
+                  defaultValue={accountName}
+                  onEnter={e => onSaveName(e.target.value)}
+                  onBlur={() => onExposeName(false)}
                   style={{
                     fontSize: 25,
                     fontWeight: 500,
-                    marginLeft: -5,
                     marginTop: -5,
-                    backgroundColor: 'transparent',
-                    '& svg': { display: 'none' },
-                    '&:hover svg': { display: 'unset' }
+                    marginBottom: -2,
+                    marginLeft: -5
                   }}
-                  onClick={() => onExposeName(true)}
-                >
-                  {accountName}
+                />
+              </InitialFocus>
+            ) : isNameEditable ? (
+              <Button
+                bare
+                style={{
+                  fontSize: 18,
+                  fontWeight: 500,
+                  height: 24,
+                  backgroundColor: 'transparent',
+                  '& svg': { display: 'none' },
+                  '&:hover svg': { display: 'unset' }
+                }}
+                onClick={() => onExposeName(true)}
+              >
+                {accountName}
 
-                  <Pencil1
-                    style={{
-                      width: 11,
-                      height: 11,
-                      marginLeft: 5,
-                      color: colors.n4
-                    }}
-                  />
-                </Button>
-              ) : (
-                <View
-                  style={{ fontSize: 25, fontWeight: 500, marginBottom: 5 }}
-                >
-                  {accountName}
-                </View>
-              )}
-            </View>
+                <Pencil1
+                  style={{
+                    width: 11,
+                    height: 11,
+                    marginLeft: 5,
+                    color: colors.n4
+                  }}
+                />
+              </Button>
+            ) : (
+              <View
+                style={{
+                  fontSize: 25,
+                  fontWeight: 500,
+                  marginBottom: 5
+                }}
+              >
+                {accountName}
+              </View>
+            )}
+            {!showEmptyMessage && (
+              <Button
+                bare
+                onClick={onAddTransaction}
+                style={{ justifyContent: 'center', width: 65 }}
+              >
+                <Add width={20} height={20} />
+              </Button>
+            )}
           </View>
 
           <Balances
@@ -740,43 +783,6 @@ const AccountHeader = React.memo(
             align="center"
             style={{ marginTop: 12 }}
           >
-            {((account && !account.closed) || canSync) && (
-              <Button bare onClick={canSync ? onSync : onImport}>
-                {canSync ? (
-                  <>
-                    <AnimatedRefresh
-                      width={13}
-                      height={13}
-                      animating={
-                        (account && accountsSyncing === account.name) ||
-                        accountsSyncing === '__all'
-                      }
-                      style={{ color: 'currentColor', marginRight: 4 }}
-                    />{' '}
-                    Sync
-                  </>
-                ) : (
-                  <>
-                    <DownloadThickBottom
-                      width={13}
-                      height={13}
-                      style={{ color: 'currentColor', marginRight: 4 }}
-                    />{' '}
-                    Import
-                  </>
-                )}
-              </Button>
-            )}
-            {!showEmptyMessage && (
-              <Button bare onClick={onAddTransaction}>
-                <Add
-                  width={10}
-                  height={10}
-                  style={{ color: 'inherit', marginRight: 3 }}
-                />{' '}
-                Add New
-              </Button>
-            )}
             <View>
               <FilterButton onApply={onApplyFilter} />
             </View>
@@ -1702,8 +1708,8 @@ class AccountInternal extends React.PureComponent {
                     showAccount={
                       !accountId ||
                       accountId === 'offbudget' ||
-                        accountId === 'budgeted' ||
-                        accountId === 'uncategorized'
+                      accountId === 'budgeted' ||
+                      accountId === 'uncategorized'
                     }
                     isAdding={this.state.isAdding}
                     isNew={this.isNew}
@@ -1781,9 +1787,10 @@ export default function Account(props) {
     showBalances:
       props.match &&
       state.prefs.local['show-balances-' + props.match.params.id],
-    showExtraBalances:
+    showExtraBalances: Boolean(
       props.match &&
-      state.prefs.local['show-extra-balances-' + props.match.params.id],
+        state.prefs.local['show-extra-balances-' + props.match.params.id]
+    ),
     payees: state.queries.payees,
     modalShowing: state.modals.modalStack.length > 0,
     accountsSyncing: state.account.accountsSyncing,
@@ -1836,3 +1843,99 @@ export default function Account(props) {
     </SchedulesProvider>
   );
 }
+
+// class TransactionSearchInput extends React.Component {
+//   state = { text: '' };
+
+//   performSearch = () => {
+//     this.props.onSearch(this.state.text);
+//   };
+
+//   onChange = text => {
+//     this.setState({ text }, this.performSearch);
+//   };
+
+//   render() {
+//     const { accountName } = this.props;
+//     const { text } = this.state;
+
+//     return (
+//       <View
+//         style={{
+//           flexDirection: 'row',
+//           alignItems: 'center',
+//           backgroundColor: colors.n11,
+//           marginVertical: 11,
+//           marginHorizontal: 11,
+//           borderRadius: 4,
+//           padding: 10
+//         }}
+//       >
+//         <Search width="20" height="20" style={{ color: colors.n7 }} />
+//         <TextInput
+//           value={text}
+//           onChangeText={this.onChange}
+//           placeholder={`Search ${accountName}`}
+//           placeholderTextColor={colors.n7}
+//           style={{ fontSize: 15, flex: 1, marginLeft: 4, padding: 0 }}
+//         />
+//       </View>
+//     );
+//   }
+// }
+
+// export function AccountDetails({
+//   account,
+//   prependTransactions,
+//   transactions,
+//   accounts,
+//   categories,
+//   payees,
+//   balance,
+//   isNewTransaction,
+//   onLoadMore,
+//   onSearch,
+//   onSelectTransaction,
+//   refreshControl
+// }) {
+//   let allTransactions = useMemo(() => {
+//     return prependTransactions.concat(transactions);
+//   }, [prependTransactions, transactions]);
+
+//   return (
+//     <View style={{ flex: 1, backgroundColor: 'white' }}>
+//       <View style={{ alignItems: 'center', marginTop: 10, marginBottom: 10 }}>
+//         <Label title="BALANCE" />
+//         <CellValue
+//           binding={balance}
+//           type="financial"
+//           debug={true}
+//           style={{
+//             fontSize: 18,
+//             fontWeight: '500'
+//           }}
+//           getStyle={value => ({
+//             color: value < 0 ? colors.r4 : colors.p5
+//           })}
+//         />
+//       </View>
+//       <View style={{ borderBottomWidth: 1, borderColor: colors.n9 }}>
+//         <TransactionSearchInput
+//           accountName={account.name}
+//           onSearch={onSearch}
+//         />
+//       </View>
+//       <TransactionList
+//         transactions={allTransactions}
+//         categories={categories}
+//         accounts={accounts}
+//         payees={payees}
+//         showCategory={!account.offbudget}
+//         isNew={isNewTransaction}
+//         refreshControl={refreshControl}
+//         onLoadMore={onLoadMore}
+//         onSelect={onSelectTransaction}
+//       />
+//     </View>
+//   );
+// }

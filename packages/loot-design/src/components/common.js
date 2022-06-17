@@ -1072,5 +1072,24 @@ export class TooltipTarget extends React.Component {
   }
 }
 
+export function Label({ title, style }) {
+  return (
+    <Text
+      style={[
+        styles.text,
+        {
+          color: colors.n2,
+          textAlign: 'right',
+          fontSize: 12,
+          marginBottom: 2
+        },
+        style
+      ]}
+    >
+      {title}
+    </Text>
+  );
+}
+
 export * from './tooltips';
 export { useTooltip } from './tooltips';
