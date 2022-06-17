@@ -7,6 +7,7 @@ import {
   useLocation,
   NavLink
 } from 'react-router-dom';
+import { CompatRouter } from 'react-router-dom-v5-compat';
 import { createBrowserHistory } from 'history';
 import { connect } from 'react-redux';
 import { DndProvider } from 'react-dnd';
@@ -18,6 +19,7 @@ import checkForUpgradeNotifications from 'loot-core/src/client/upgrade-notificat
 import { colors, styles } from 'loot-design/src/style';
 import { View } from 'loot-design/src/components/common';
 import { default as MobileAccounts } from './accounts/MobileAccounts';
+import { default as MobileAccount } from './accounts/MobileAccount';
 import BankSyncStatus from './BankSyncStatus';
 import { BudgetMonthCountProvider } from 'loot-design/src/components/budget/BudgetMonthCountContext';
 import Wallet from 'loot-design/src/svg/v1/Wallet';
@@ -109,14 +111,14 @@ function Routes({ isMobile, location }) {
           />
 
           <Route path="/tools/fix-splits" exact component={FixSplitsTool} />
-
           <Route
             path="/accounts/:id"
             exact
             children={props => {
+              const AcctCmp = isMobile ? MobileAccount : Account;
               return (
                 props.match && (
-                  <Account key={props.match.params.id} {...props} />
+                  <AcctCmp key={props.match.params.id} {...props} />
                 )
               );
             }}
@@ -195,12 +197,11 @@ function MobileNavTabs() {
         bottom: 0,
         boxShadow: styles.shadow,
         display: 'flex',
-        flex: '1 auto',
         height: '75px',
         justifyContent: 'space-around',
-        position: 'absolute',
-        width: '100%',
-        zIndex: '100'
+        // position: 'absolute',
+        width: '100%'
+        // zIndex: '100'
       }}
     >
       <NavTab name="Budget" path="/budget" icon={Wallet} isActive={false} />
@@ -291,64 +292,67 @@ class FinancesApp extends React.Component {
   render() {
     return (
       <Router history={this.history}>
-        <View
-          style={{ height: '100%', backgroundColor: colors.n10 }}
-          className="rabbit"
-        >
-          <GlobalKeys />
+        <CompatRouter>
+          <View
+            style={{ height: '100%', backgroundColor: colors.n10 }}
+            className="rabbit"
+          >
+            <GlobalKeys />
 
-          <View style={{ flexDirection: 'row', flex: 1 }} className="bunny">
-            {!this.state.isMobile && <FloatableSidebar />}
+            <View style={{ flexDirection: 'row', flex: 1 }} className="bunny">
+              {!this.state.isMobile && <FloatableSidebar />}
 
-            <div
-              style={{
-                flex: 1,
-                display: 'flex',
-                flexDirection: 'column',
-                height: '100%',
-                overflow: 'hidden',
-                position: 'relative',
-                width: '100%'
-              }}
-            >
-              <Titlebar
-                style={{
-                  WebkitAppRegion: 'drag',
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  zIndex: 1000
-                }}
-              />
               <div
                 style={{
                   flex: 1,
                   display: 'flex',
-                  overflow: 'auto',
-                  position: 'relative'
+                  flexDirection: 'column',
+                  overflow: 'hidden',
+                  position: 'relative',
+                  width: '100%'
                 }}
               >
-                <Notifications />
-                <BankSyncStatus />
+                {!this.state.isMobile && (
+                  <Titlebar
+                    style={{
+                      WebkitAppRegion: 'drag',
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      zIndex: 1000
+                    }}
+                  />
+                )}
+                <div
+                  style={{
+                    flex: 1,
+                    display: 'flex',
+                    overflow: 'auto',
+                    position: 'relative'
+                  }}
+                >
+                  <Notifications />
+                  <BankSyncStatus />
 
-                <StackedRoutes isMobile={this.state.isMobile} />
+                  <StackedRoutes isMobile={this.state.isMobile} />
 
-                {/*window.Actual.IS_DEV && <Debugger />*/}
-                {/*window.Actual.IS_DEV && <URLBar />*/}
+                  {/*window.Actual.IS_DEV && <Debugger />*/}
+                  {/*window.Actual.IS_DEV && <URLBar />*/}
 
-                <Modals history={this.history} />
+                  <Modals history={this.history} />
+                </div>
+                {this.state.isMobile && (
+                  <Switch>
+                    <Route path="/budget" component={MobileNavTabs} />
+                    <Route path="/accounts" component={MobileNavTabs} />
+                    <Route path="/settings" component={MobileNavTabs} />
+                  </Switch>
+                )}
               </div>
-              {this.state.isMobile && (
-                <>
-                  <Route path="/budget" component={MobileNavTabs} />
-                  <Route path="/accounts" component={MobileNavTabs} />
-                  <Route path="/settings" component={MobileNavTabs} />
-                </>
-              )}
-            </div>
+            </View>
           </View>
-        </View>
+        </CompatRouter>
       </Router>
     );
   }

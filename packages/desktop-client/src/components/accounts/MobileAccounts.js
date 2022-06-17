@@ -1,17 +1,30 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
+import { useNavigate } from 'react-router-dom-v5-compat';
 import { prettyAccountType } from 'loot-core/src/shared/accounts';
 import Wallet from 'loot-design/src/svg/v1/Wallet';
 import { colors, mobileStyles as styles } from 'loot-design/src/style';
-import { Text, TextOneLine, View } from 'loot-design/src/components/common';
-import { TransactionList } from './Transactions';
+import {
+  Button,
+  Text,
+  TextOneLine,
+  View
+} from 'loot-design/src/components/common';
 import CellValue from 'loot-design/src/components/spreadsheet/CellValue';
 import * as actions from 'loot-core/src/client/actions';
 import * as queries from 'loot-core/src/client/queries';
+import { withThemeColor } from 'loot-design/src/util/withThemeColor';
+import { isMobile } from '../../util';
 
 export function AccountHeader({ name, amount }) {
   return (
-    <View style={{ marginTop: 40, flexDirection: 'row', marginHorizontal: 10 }}>
+    <View
+      style={{
+        flexDirection: 'row',
+        marginTop: 28,
+        marginBottom: 10
+      }}
+    >
       <View style={{ flex: 1 }}>
         <Text
           style={[
@@ -32,42 +45,37 @@ export function AccountHeader({ name, amount }) {
   );
 }
 
-export function Account({
-  account,
-  updated,
-  getBalanceQuery,
-  index,
-  onSelect
-}) {
+export function Account({ account, updated, getBalanceQuery, onSelect }) {
   return (
     <View
       style={{
+        flex: '1 0 auto',
         flexDirection: 'row',
         backgroundColor: 'white',
-        marginHorizontal: 10,
-        marginTop: 10,
-        shadowColor: '#9594A8',
-        shadowOffset: { width: 0, height: 1 },
-        shadowRadius: 1,
-        shadowOpacity: 1,
-        borderRadius: 6
+        boxShadow: `0 1px 1px ${colors.n7}`,
+        borderRadius: 6,
+        marginTop: 10
       }}
     >
-      <button
-        onClick={() => onSelect(account.id)}
+      <Button
+        onMouseDown={() => onSelect(account.id)}
         style={{
           flexDirection: 'row',
           flex: 1,
           alignItems: 'center',
           borderRadius: 6,
-          paddingHorizontal: 16,
-          paddingVertical: 15,
           '&:active': {
             opacity: 0.1
           }
         }}
       >
-        <View style={{ flex: 1 }}>
+        <View
+          style={{
+            flex: '1 auto',
+            height: 52,
+            marginTop: 10
+          }}
+        >
           <View
             style={{
               flexDirection: 'row',
@@ -79,7 +87,7 @@ export function Account({
                 styles.text,
                 {
                   fontSize: 17,
-                  fontWeight: '600',
+                  fontWeight: 600,
                   color: updated ? colors.b2 : colors.n2,
                   paddingRight: 30
                 }
@@ -91,7 +99,7 @@ export function Account({
               <View
                 style={{
                   backgroundColor: colors.g5,
-                  marginLeft: -23,
+                  marginLeft: '-23px',
                   width: 8,
                   height: 8,
                   borderRadius: 8
@@ -103,15 +111,10 @@ export function Account({
             style={{
               flexDirection: 'row',
               alignItems: 'center',
-              marginTop: 4
+              marginTop: '4px'
             }}
           >
-            <Text
-              style={[
-                styles.text,
-                { fontSize: 13, lineHeight: 13, color: colors.n5 }
-              ]}
-            >
+            <Text style={[styles.smallText, { color: colors.n5 }]}>
               {prettyAccountType(account.type)}
             </Text>
             <Wallet
@@ -131,7 +134,7 @@ export function Account({
           style={{ fontSize: 16, color: colors.n3 }}
           getStyle={value => value < 0 && { color: colors.r4 }}
         />
-      </button>
+      </Button>
     </View>
   );
 }
@@ -145,15 +148,21 @@ function EmptyMessage({ onAdd }) {
         yourself.
       </Text>
 
-      <button
-        // primary
+      <Button
+        primary
         style={{ marginTop: 20, alignSelf: 'center' }}
-        onClick={onAdd}
+        onClick={() =>
+          isMobile()
+            ? alert(
+                'Account creation is not supported on mobile on the self-hosted service yet'
+              )
+            : onAdd()
+        }
       >
         Add Account
-      </button>
+      </Button>
 
-      <Text style={{ marginTop: 20, color: colors.n5, lineHeight: 19 }}>
+      <Text style={{ marginTop: 20, color: colors.n5 }}>
         In the future, you can add accounts using the add button in the header.
       </Text>
     </View>
@@ -192,35 +201,53 @@ export class AccountList extends React.Component {
     }
 
     const accountContent = (
-      <View
-        style={{
-          backgroundColor: colors.n10,
-          paddingBottom: 10
-        }}
-      >
-        <AccountHeader name="Budgeted" amount={getOnBudgetBalance()} />
-        {budgetedAccounts.map((acct, idx) => (
-          <Account
-            account={acct}
-            index={idx}
-            updated={updatedAccounts.includes(acct.id)}
-            getBalanceQuery={getBalanceQuery}
-            onSelect={onSelectAccount}
-          />
-        ))}
+      <View style={{ overflowY: 'auto' }}>
+        <View
+          style={{
+            alignItems: 'flex-end',
+            backgroundColor: colors.b2,
+            color: 'white',
+            flexDirection: 'row',
+            fontSize: 18,
+            fontWeight: 500,
+            height: 70,
+            justifyContent: 'center',
+            overflowY: 'auto',
+            paddingBottom: 10
+          }}
+        >
+          Accounts
+        </View>
+        <View
+          style={{
+            backgroundColor: colors.n10,
+            overflowY: 'auto',
+            padding: 10
+          }}
+        >
+          <AccountHeader name="Budgeted" amount={getOnBudgetBalance()} />
+          {budgetedAccounts.map((acct, idx) => (
+            <Account
+              account={acct}
+              key={acct.id}
+              updated={updatedAccounts.includes(acct.id)}
+              getBalanceQuery={getBalanceQuery}
+              onSelect={onSelectAccount}
+            />
+          ))}
 
-        <AccountHeader name="Off budget" amount={getOffBudgetBalance()} />
-        {offbudgetAccounts.map((acct, idx) => (
-          <Account
-            account={acct}
-            index={idx}
-            updated={updatedAccounts.includes(acct.id)}
-            getBalanceQuery={getBalanceQuery}
-            onSelect={onSelectAccount}
-          />
-        ))}
+          <AccountHeader name="Off budget" amount={getOffBudgetBalance()} />
+          {offbudgetAccounts.map((acct, idx) => (
+            <Account
+              account={acct}
+              key={acct.id}
+              updated={updatedAccounts.includes(acct.id)}
+              getBalanceQuery={getBalanceQuery}
+              onSelect={onSelectAccount}
+            />
+          ))}
 
-        {/*<Label
+          {/*<Label
           title="RECENT TRANSACTIONS"
           style={{
             textAlign: 'center',
@@ -229,6 +256,7 @@ export class AccountList extends React.Component {
             marginLeft: 10
           }}
           />*/}
+        </View>
       </View>
     );
 
@@ -241,7 +269,7 @@ export class AccountList extends React.Component {
           scrollProps={{
             ListHeaderComponent: accountContent
           }}
-          refreshControl={refreshControl}
+          // refreshControl={refreshControl}
           onSelect={onSelectTransaction}
         />
       </View>
@@ -249,67 +277,71 @@ export class AccountList extends React.Component {
   }
 }
 
-class Accounts extends React.Component {
-  state = { transactions: [] };
+function Accounts(props) {
+  const transactions = useState({});
+  const navigate = useNavigate();
 
-  async componentDidMount() {
-    if (this.props.categories.length === 0) {
-      await this.props.getCategories();
-    }
+  useEffect(() => {
+    const getAccounts = async () => {
+      if (props.categories.length === 0) {
+        await props.getCategories();
+      }
 
-    this.props.getAccounts();
-  }
+      props.getAccounts();
+    };
 
-  sync = async () => {
-    await this.props.syncAndDownload();
+    getAccounts();
+  }, []);
+
+  // const sync = async () => {
+  //   await props.syncAndDownload();
+  // };
+
+  const onSelectAccount = id => {
+    const account = props.accounts.find(acct => acct.id === id);
+    navigate(`/accounts/${id}`);
+    // props.navigation.navigate('Account', { id, title: account.name });
   };
 
-  onSelectAccount = id => {
-    const account = this.props.accounts.find(acct => acct.id === id);
-    this.props.navigation.navigate('Account', { id, title: account.name });
+  const onSelectTransaction = transaction => {
+    navigate(`/transaction/${transaction}`);
+    // props.navigation.navigate('Transaction', { transaction });
   };
 
-  onSelectTransaction = transaction => {
-    this.props.navigation.navigate('Transaction', { transaction });
-  };
+  let {
+    navigation,
+    accounts,
+    categories,
+    payees,
+    newTransactions,
+    updatedAccounts,
+    prefs
+  } = props;
+  let numberFormat = prefs.numberFormat || 'comma-dot';
 
-  render() {
-    let {
-      navigation,
-      accounts,
-      categories,
-      payees,
-      newTransactions,
-      updatedAccounts,
-      prefs
-    } = this.props;
-    let { transactions } = this.state;
-    let numberFormat = prefs.numberFormat || 'comma-dot';
-
-    return (
-      <View style={{ flex: 1 }}>
-        <AccountList
-          // This key forces the whole table rerender when the number
-          // format changes
-          key={numberFormat}
-          accounts={accounts.filter(account => !account.closed)}
-          categories={categories}
-          transactions={transactions || []}
-          updatedAccounts={updatedAccounts}
-          newTransactions={newTransactions}
-          getBalanceQuery={queries.accountBalance}
-          getOnBudgetBalance={queries.budgetedAccountBalance}
-          getOffBudgetBalance={queries.offbudgetAccountBalance}
-          onAddAccount={() => navigation.navigate('AddAccountModal')}
-          onSelectAccount={this.onSelectAccount}
-          onSelectTransaction={this.onSelectTransaction}
-          // refreshControl={
-          //   <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-          // }
-        />
-      </View>
-    );
-  }
+  return (
+    <View style={{ flex: 1 }}>
+      <AccountList
+        // This key forces the whole table rerender when the number
+        // format changes
+        key={numberFormat}
+        accounts={accounts.filter(account => !account.closed)}
+        categories={categories}
+        transactions={transactions || []}
+        updatedAccounts={updatedAccounts}
+        newTransactions={newTransactions}
+        getBalanceQuery={queries.accountBalance}
+        getOnBudgetBalance={queries.budgetedAccountBalance}
+        getOffBudgetBalance={queries.offbudgetAccountBalance}
+        onAddAccount={() => {}} //navigation.navigate('AddAccountModal')}
+        onSelectAccount={onSelectAccount}
+        onSelectTransaction={onSelectTransaction}
+        // refreshControl={
+        //   <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        // }
+      />
+    </View>
+  );
 }
 
 export default connect(
