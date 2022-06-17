@@ -316,8 +316,8 @@ export class TransactionEdit extends React.Component {
       outputRange: [-6, -5, -5, 20]
     });
     return (
-      <button
-        onClick={this.close}
+      <Button
+        onPress={this.close}
         style={{
           flex: 1,
           justifyContent: 'center',
@@ -333,7 +333,7 @@ export class TransactionEdit extends React.Component {
         >
           Delete
         </Text>
-      </button>
+      </Button>
     );
   };
 
@@ -541,14 +541,14 @@ export class TransactionEdit extends React.Component {
                       {integerToCurrency(transaction.error.difference)}
                     </Text>
                   )}
-                  <button
+                  <Button
                     style={{
                       padding: '6px 15px'
                     }}
-                    onClick={this.onAddSplit}
+                    onPress={this.onAddSplit}
                   >
                     Add split
-                  </button>
+                  </Button>
                 </View>
               </View>
             )}
@@ -781,8 +781,8 @@ export class Transaction extends React.PureComponent {
     ];
 
     return (
-      <button
-        onClick={() => onSelect(transaction)}
+      <Button
+        onPress={() => onSelect(transaction)}
         style={{ backgroundColor: 'white', '&:active': { opacity: 0.1 } }}
       >
         <ListItem
@@ -857,7 +857,7 @@ export class Transaction extends React.PureComponent {
             {integerToCurrency(amount)}
           </Text>
         </ListItem>
-      </button>
+      </Button>
     );
   }
 }
@@ -893,24 +893,30 @@ export class TransactionList extends React.Component {
     return sections;
   });
 
-  renderSection({ section }) {
-    return <DateHeader date={section.date} />;
-  }
+  // renderSection({ section }) {
+  //   return (
+  //     <Section title="section.date">
+  //       <DateHeader date={section.date} />
+  //     </Section>
+  //   );
+  // }
 
-  renderItem = ({ item }) => {
-    return (
-      <Transaction
-        transaction={item}
-        categories={this.props.categories}
-        accounts={this.props.accounts}
-        payees={this.props.payees}
-        showCategory={this.props.showCategory}
-        added={this.props.isNew(item.id)}
-        style={item.isLast && { borderColor: colors.n9 }}
-        onSelect={() => this.props.onSelect(item)}
-      />
-    );
-  };
+  // renderItem = ({ item }) => {
+  //   return (
+  //     <Item>
+  //       <Transaction
+  //         transaction={item}
+  //         categories={this.props.categories}
+  //         accounts={this.props.accounts}
+  //         payees={this.props.payees}
+  //         showCategory={this.props.showCategory}
+  //         added={this.props.isNew(item.id)}
+  //         style={item.isLast && { borderColor: colors.n9 }}
+  //         onSelect={() => this.props.onSelect(item)}
+  //       />
+  //     </Item>
+  //   );
+  // };
 
   render() {
     const {
@@ -921,35 +927,60 @@ export class TransactionList extends React.Component {
       refreshControl
     } = this.props;
 
+    // return (
+    //   <SectionList
+    //     style={[{ flex: 1 }, style]}
+    //     {...scrollProps}
+    //     ListHeaderComponent={
+    //       // Support pull to refresh by making sure it's always
+    //       // appended and composing the props
+    //       <React.Fragment>{scrollProps.ListHeaderComponent}</React.Fragment>
+    //     }
+    //     renderItem={this.renderItem}
+    //     renderSectionHeader={this.renderSection}
+    //     sections={this.makeData(transactions)}
+    //     keyExtractor={item => item.id}
+    //     refreshControl={refreshControl}
+    //     onEndReachedThreshold={0.5}
+    //     onEndReached={onLoadMore}
+    //   />
+
+    const sections = this.makeData(transactions);
+
     return (
-      //   <SectionList
-      //     style={[{ flex: 1 }, style]}
-      //     {...scrollProps}
-      //     ListHeaderComponent={
-      //       // Support pull to refresh by making sure it's always
-      //       // appended and composing the props
-      //       <React.Fragment>{scrollProps.ListHeaderComponent}</React.Fragment>
-      //     }
-      //     renderItem={this.renderItem}
-      //     renderSectionHeader={this.renderSection}
-      //     sections={this.makeData(transactions)}
-      //     keyExtractor={item => item.id}
-      //     refreshControl={refreshControl}
-      //     onEndReachedThreshold={0.5}
-      //     onEndReached={onLoadMore}
-      //   />
-      <ListBox label="Choose an option" selectionMode="multiple">
-        <Section title="Section 1">
-          <Item>One</Item>
-          <Item>Two</Item>
-          <Item>Three</Item>
-        </Section>
-        <Section title="Section 2">
-          <Item>One</Item>
-          <Item>Two</Item>
-          <Item>Three</Item>
-        </Section>
-      </ListBox>
+      <>
+        {scrollProps.ListHeaderComponent}
+        {/* <ListBox label="" selectionMode="multiple">
+          {sections.map(section => {
+            return (
+              <Section title={section.date.toString()}>
+                {section.items.map((item, index, items) => {
+                  console.log('section.items.length', section.items.length);
+                  return (
+                    <Item
+                      style={{
+                        borderColor:
+                          index === items.length - 1 ? colors.n9 : 'inherit'
+                      }}
+                    >
+                      <Transaction
+                        transaction={item}
+                        categories={this.props.categories}
+                        accounts={this.props.accounts}
+                        payees={this.props.payees}
+                        showCategory={this.props.showCategory}
+                        added={this.props.isNew(item.id)}
+                        style={item.isLast && { borderColor: colors.n9 }}
+                        onSelect={() => this.props.onSelect(item)}
+                      />
+                    </Item>
+                  );
+                })}
+              </Section>
+            );
+          })}
+        </ListBox> */}
+      </>
     );
   }
 }

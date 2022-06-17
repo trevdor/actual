@@ -93,7 +93,8 @@
     "@react-aria/visually-hidden": "^3.3.0",
     "@react-stately/collections": "^3.4.0",
     "@react-stately/list": "^3.5.0",
-    "@react-stately/toggle": "^3.3.0"
+    "@react-stately/toggle": "^3.3.0",
+    "react-router-dom-v5-compat": "^6.3.0"
   },
   "scripts": {
     "start": "cross-env PORT=3001 node scripts/start.js",
