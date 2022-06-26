@@ -938,32 +938,6 @@ export class BudgetTable extends React.Component {
               />
             )}
             <View style={{ flex: 1, zIndex: -1 }} />
-
-            <View style={{ width: 90 }}>
-              <Label title="BUDGETED" style={{ color: colors.n1 }} />
-              <CellValue
-                binding={reportBudget.totalBudgetedExpense}
-                type="financial"
-                style={[
-                  styles.smallText,
-                  { color: colors.n1, textAlign: 'right', fontWeight: '500' }
-                ]}
-                formatter={value => {
-                  return format(-parseFloat(value || '0'), 'financial');
-                }}
-              />
-            </View>
-            <View style={{ width: 90 }}>
-              <Label title="BALANCE" style={{ color: colors.n1 }} />
-              <CellValue
-                binding={rolloverBudget.totalBalance}
-                type="financial"
-                style={[
-                  styles.smallText,
-                  { color: colors.n1, textAlign: 'right', fontWeight: '500' }
-                ]}
-              />
-            </View>
           </View>
 
           {/* <AndroidKeyboardAvoidingView includeStatusBar={true}> */}
