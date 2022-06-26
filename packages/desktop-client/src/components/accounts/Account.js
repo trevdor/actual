@@ -66,14 +66,11 @@ import { Query } from 'loot-core/src/shared/query';
 import * as aql from 'loot-core/src/client/query-helpers';
 import {
   deleteTransaction,
+  isPreviewId,
   updateTransaction,
   ungroupTransactions
 } from 'loot-core/src/shared/transactions';
-import {
-  SplitsExpandedProvider,
-  useSplitsExpanded,
-  isPreviewId
-} from './TransactionsTable';
+import { SplitsExpandedProvider, useSplitsExpanded } from './TransactionsTable';
 import { styles, colors } from 'loot-design/src/style';
 import TransactionList from './TransactionList';
 import { authorizeBank } from '../../plaid';
@@ -1702,8 +1699,8 @@ class AccountInternal extends React.PureComponent {
                     showAccount={
                       !accountId ||
                       accountId === 'offbudget' ||
-                        accountId === 'budgeted' ||
-                        accountId === 'uncategorized'
+                      accountId === 'budgeted' ||
+                      accountId === 'uncategorized'
                     }
                     isAdding={this.state.isAdding}
                     isNew={this.isNew}

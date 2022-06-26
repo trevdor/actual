@@ -44,7 +44,7 @@ export function AccountHeader({ name, amount }) {
   );
 }
 
-export function Account({ account, updated, getBalanceQuery, onSelect }) {
+export function AccountCard({ account, updated, getBalanceQuery, onSelect }) {
   return (
     <View
       style={{
@@ -220,7 +220,7 @@ export class AccountList extends React.Component {
         >
           <AccountHeader name="Budgeted" amount={getOnBudgetBalance()} />
           {budgetedAccounts.map((acct, idx) => (
-            <Account
+            <AccountCard
               account={acct}
               key={acct.id}
               updated={updatedAccounts.includes(acct.id)}
@@ -231,7 +231,7 @@ export class AccountList extends React.Component {
 
           <AccountHeader name="Off budget" amount={getOffBudgetBalance()} />
           {offbudgetAccounts.map((acct, idx) => (
-            <Account
+            <AccountCard
               account={acct}
               key={acct.id}
               updated={updatedAccounts.includes(acct.id)}
@@ -255,7 +255,7 @@ export class AccountList extends React.Component {
 
     return (
       <View style={{ flex: 1 }}>
-        <TransactionList
+        {/* <TransactionList
           transactions={transactions}
           categories={categories}
           isNew={this.isNewTransaction}
@@ -264,7 +264,8 @@ export class AccountList extends React.Component {
           }}
           // refreshControl={refreshControl}
           onSelect={onSelectTransaction}
-        />
+        /> */}
+        {accountContent}
       </View>
     );
   }
@@ -291,9 +292,7 @@ function Accounts(props) {
   // };
 
   const onSelectAccount = id => {
-    const account = props.accounts.find(acct => acct.id === id);
     navigate(`/accounts/${id}`);
-    // props.navigation.navigate('Account', { id, title: account.name });
   };
 
   const onSelectTransaction = transaction => {

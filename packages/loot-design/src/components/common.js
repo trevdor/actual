@@ -72,7 +72,7 @@ export function Block(props) {
 
 export function Link({ style, children, ...nativeProps }) {
   return (
-    <button
+    <Button
       {...css(
         {
           textDecoration: 'none',
@@ -92,7 +92,7 @@ export function Link({ style, children, ...nativeProps }) {
       {...nativeProps}
     >
       {children}
-    </button>
+    </Button>
   );
 }
 

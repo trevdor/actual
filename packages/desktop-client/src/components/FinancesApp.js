@@ -293,13 +293,10 @@ class FinancesApp extends React.Component {
     return (
       <Router history={this.history}>
         <CompatRouter>
-          <View
-            style={{ height: '100%', backgroundColor: colors.n10 }}
-            className="rabbit"
-          >
+          <View style={{ height: '100%', backgroundColor: colors.n10 }}>
             <GlobalKeys />
 
-            <View style={{ flexDirection: 'row', flex: 1 }} className="bunny">
+            <View style={{ flexDirection: 'row', flex: 1 }}>
               {!this.state.isMobile && <FloatableSidebar />}
 
               <div

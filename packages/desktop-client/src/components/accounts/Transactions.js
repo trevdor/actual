@@ -22,13 +22,14 @@ import {
   updateTransaction,
   addSplitTransaction,
   deleteTransaction,
-  realizeTempTransactions
+  realizeTempTransactions,
+  isPreviewId
 } from 'loot-core/src/shared/transactions';
 
 import Text from 'loot-design/src/components/Text';
 import View from 'loot-design/src/components/View';
 import { AmountInput } from '../util/AmountInput';
-import ExitTransition from 'loot-design/src/components/mobile/ExitTransition';
+import ExitTransition from 'loot-design/src/components/ExitTransition';
 import { ListItem } from 'loot-design/src/components/mobile/table';
 
 import EditSkull1 from 'loot-design/src/svg/v2/EditSkull1';
@@ -60,10 +61,6 @@ import { useSeparator } from '@react-aria/separator';
 
 let getPayeesById = memoizeOne(payees => groupById(payees));
 let getAccountsById = memoizeOne(accounts => groupById(accounts));
-
-export function isPreviewId(id) {
-  return id.indexOf('preview/') !== -1;
-}
 
 function getDescriptionPretty(transaction, payee, transferAcct) {
   let { amount } = transaction;
@@ -722,145 +719,145 @@ function Status({ status }) {
   );
 }
 
-export class Transaction extends React.PureComponent {
-  render() {
-    const {
-      transaction,
-      accounts,
-      categories,
-      payees,
-      showCategory,
-      added,
-      onSelect,
-      style
-    } = this.props;
-    let {
-      id,
-      payee: payeeId,
-      amount,
-      category,
-      cleared,
-      is_parent,
-      notes,
-      schedule
-    } = transaction;
-    let categoryName = category ? lookupName(categories, category) : null;
+// export class Transaction extends React.PureComponent {
+//   render() {
+//     const {
+//       transaction,
+//       accounts,
+//       categories,
+//       payees,
+//       showCategory,
+//       added,
+//       onSelect,
+//       style
+//     } = this.props;
+//     let {
+//       id,
+//       payee: payeeId,
+//       amount,
+//       category,
+//       cleared,
+//       is_parent,
+//       notes,
+//       schedule
+//     } = transaction;
+//     let categoryName = category ? lookupName(categories, category) : null;
 
-    let payee = payees && payeeId && getPayeesById(payees)[payeeId];
-    let transferAcct =
-      payee &&
-      payee.transfer_acct &&
-      getAccountsById(accounts)[payee.transfer_acct];
+//     let payee = payees && payeeId && getPayeesById(payees)[payeeId];
+//     let transferAcct =
+//       payee &&
+//       payee.transfer_acct &&
+//       getAccountsById(accounts)[payee.transfer_acct];
 
-    let prettyDescription = getDescriptionPretty(
-      transaction,
-      payee,
-      transferAcct
-    );
-    let prettyCategory = transferAcct
-      ? 'Transfer'
-      : is_parent
-      ? 'Split'
-      : categoryName;
+//     let prettyDescription = getDescriptionPretty(
+//       transaction,
+//       payee,
+//       transferAcct
+//     );
+//     let prettyCategory = transferAcct
+//       ? 'Transfer'
+//       : is_parent
+//       ? 'Split'
+//       : categoryName;
 
-    let isPreview = isPreviewId(id);
-    let textStyle = isPreview && {
-      fontStyle: 'italic',
-      color: colors.n5
-    };
-    let textStyleWithColor = [
-      textStyle,
-      isPreview && {
-        color:
-          notes === 'missed'
-            ? colors.r6
-            : notes === 'due'
-            ? colors.y4
-            : colors.n5
-      }
-    ];
+//     let isPreview = isPreviewId(id);
+//     let textStyle = isPreview && {
+//       fontStyle: 'italic',
+//       color: colors.n5
+//     };
+//     let textStyleWithColor = [
+//       textStyle,
+//       isPreview && {
+//         color:
+//           notes === 'missed'
+//             ? colors.r6
+//             : notes === 'due'
+//             ? colors.y4
+//             : colors.n5
+//       }
+//     ];
 
-    return (
-      <Button
-        onPress={() => onSelect(transaction)}
-        style={{ backgroundColor: 'white', '&:active': { opacity: 0.1 } }}
-      >
-        <ListItem
-          style={[
-            { flex: 1, height: 60 },
-            isPreview && { backgroundColor: colors.n11 },
-            style
-          ]}
-        >
-          <View style={[{ flex: 1 }]}>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              {schedule && (
-                <ArrowsSynchronize
-                  style={{
-                    width: 12,
-                    height: 12,
-                    marginRight: 5,
-                    color: textStyle.color || colors.n1
-                  }}
-                />
-              )}
-              <TextOneLine
-                style={[
-                  styles.text,
-                  textStyle,
-                  { fontSize: 14, fontWeight: added ? '600' : '400' },
-                  prettyDescription === '' && {
-                    color: colors.n6,
-                    fontStyle: 'italic'
-                  }
-                ]}
-              >
-                {prettyDescription || 'Empty'}
-              </TextOneLine>
-            </View>
-            {isPreview ? (
-              <Status status={notes} />
-            ) : (
-              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <CheckCircle1
-                  style={{
-                    width: 11,
-                    height: 11,
-                    color: cleared ? colors.g6 : colors.n8,
-                    marginRight: 5
-                  }}
-                />
-                {showCategory && (
-                  <TextOneLine
-                    style={{
-                      fontSize: 11,
-                      marginTop: 1,
-                      fontWeight: '400',
-                      color: prettyCategory ? colors.n3 : colors.p7,
-                      fontStyle: prettyCategory ? null : 'italic',
-                      textAlign: 'left'
-                    }}
-                  >
-                    {prettyCategory || 'Uncategorized'}
-                  </TextOneLine>
-                )}
-              </View>
-            )}
-          </View>
-          <Text
-            style={[
-              styles.text,
-              textStyle,
-              { marginLeft: 25, marginRight: 5, fontSize: 14 }
-            ]}
-          >
-            {integerToCurrency(amount)}
-          </Text>
-        </ListItem>
-      </Button>
-    );
-  }
-}
+//     return (
+//       <Button
+//         onPress={() => onSelect(transaction)}
+//         style={{ backgroundColor: 'white', '&:active': { opacity: 0.1 } }}
+//       >
+//         <ListItem
+//           style={[
+//             { flex: 1, height: 60 },
+//             isPreview && { backgroundColor: colors.n11 },
+//             style
+//           ]}
+//         >
+//           <View style={[{ flex: 1 }]}>
+//             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+//               {schedule && (
+//                 <ArrowsSynchronize
+//                   style={{
+//                     width: 12,
+//                     height: 12,
+//                     marginRight: 5,
+//                     color: textStyle.color || colors.n1
+//                   }}
+//                 />
+//               )}
+//               <TextOneLine
+//                 style={[
+//                   styles.text,
+//                   textStyle,
+//                   { fontSize: 14, fontWeight: added ? '600' : '400' },
+//                   prettyDescription === '' && {
+//                     color: colors.n6,
+//                     fontStyle: 'italic'
+//                   }
+//                 ]}
+//               >
+//                 {prettyDescription || 'Empty'}
+//               </TextOneLine>
+//             </View>
+//             {isPreview ? (
+//               <Status status={notes} />
+//             ) : (
+//               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+//                 <CheckCircle1
+//                   style={{
+//                     width: 11,
+//                     height: 11,
+//                     color: cleared ? colors.g6 : colors.n8,
+//                     marginRight: 5
+//                   }}
+//                 />
+//                 {showCategory && (
+//                   <TextOneLine
+//                     style={{
+//                       fontSize: 11,
+//                       marginTop: 1,
+//                       fontWeight: '400',
+//                       color: prettyCategory ? colors.n3 : colors.p7,
+//                       fontStyle: prettyCategory ? null : 'italic',
+//                       textAlign: 'left'
+//                     }}
+//                   >
+//                     {prettyCategory || 'Uncategorized'}
+//                   </TextOneLine>
+//                 )}
+//               </View>
+//             )}
+//           </View>
+//           <Text
+//             style={[
+//               styles.text,
+//               textStyle,
+//               { marginLeft: 25, marginRight: 5, fontSize: 14 }
+//             ]}
+//           >
+//             {integerToCurrency(amount)}
+//           </Text>
+//         </ListItem>
+//       </Button>
+//     );
+//   }
+// }
 
 export class TransactionList extends React.Component {
   makeData = memoizeOne(transactions => {
@@ -893,30 +890,30 @@ export class TransactionList extends React.Component {
     return sections;
   });
 
-  // renderSection({ section }) {
-  //   return (
-  //     <Section title="section.date">
-  //       <DateHeader date={section.date} />
-  //     </Section>
-  //   );
-  // }
+  renderSection({ section }) {
+    return (
+      <Section title="section.date">
+        <DateHeader date={section.date} />
+      </Section>
+    );
+  }
 
-  // renderItem = ({ item }) => {
-  //   return (
-  //     <Item>
-  //       <Transaction
-  //         transaction={item}
-  //         categories={this.props.categories}
-  //         accounts={this.props.accounts}
-  //         payees={this.props.payees}
-  //         showCategory={this.props.showCategory}
-  //         added={this.props.isNew(item.id)}
-  //         style={item.isLast && { borderColor: colors.n9 }}
-  //         onSelect={() => this.props.onSelect(item)}
-  //       />
-  //     </Item>
-  //   );
-  // };
+  renderItem = ({ item }) => {
+    return (
+      <Item>
+        <Transaction
+          transaction={item}
+          categories={this.props.categories}
+          accounts={this.props.accounts}
+          payees={this.props.payees}
+          showCategory={this.props.showCategory}
+          added={this.props.isNew(item.id)}
+          style={item.isLast && { borderColor: colors.n9 }}
+          onSelect={() => this.props.onSelect(item)}
+        />
+      </Item>
+    );
+  };
 
   render() {
     const {
@@ -928,34 +925,34 @@ export class TransactionList extends React.Component {
     } = this.props;
 
     // return (
-    //   <SectionList
-    //     style={[{ flex: 1 }, style]}
-    //     {...scrollProps}
-    //     ListHeaderComponent={
-    //       // Support pull to refresh by making sure it's always
-    //       // appended and composing the props
-    //       <React.Fragment>{scrollProps.ListHeaderComponent}</React.Fragment>
-    //     }
-    //     renderItem={this.renderItem}
-    //     renderSectionHeader={this.renderSection}
-    //     sections={this.makeData(transactions)}
-    //     keyExtractor={item => item.id}
-    //     refreshControl={refreshControl}
-    //     onEndReachedThreshold={0.5}
-    //     onEndReached={onLoadMore}
-    //   />
+    // <SectionList
+    //   style={[{ flex: 1 }, style]}
+    //   {...scrollProps}
+    //   ListHeaderComponent={
+    //     // Support pull to refresh by making sure it's always
+    //     // appended and composing the props
+    //     <React.Fragment>{scrollProps.ListHeaderComponent}</React.Fragment>
+    //   }
+    //   renderItem={this.renderItem}
+    //   renderSectionHeader={this.renderSection}
+    //   sections={this.makeData(transactions)}
+    //   keyExtractor={item => item.id}
+    //   refreshControl={refreshControl}
+    //   onEndReachedThreshold={0.5}
+    //   onEndReached={onLoadMore}
+    // />
 
     const sections = this.makeData(transactions);
 
     return (
       <>
         {scrollProps.ListHeaderComponent}
-        {/* <ListBox label="" selectionMode="multiple">
+        <ListBox label="" selectionMode="multiple">
           {sections.map(section => {
             return (
-              <Section title={section.date.toString()}>
-                {section.items.map((item, index, items) => {
-                  console.log('section.items.length', section.items.length);
+              <Section title={section.date && section.date.toString()}>
+                {section.data.map((item, index, items) => {
+                  console.log('section.data.length', section.data.length);
                   return (
                     <Item
                       style={{
@@ -963,7 +960,8 @@ export class TransactionList extends React.Component {
                           index === items.length - 1 ? colors.n9 : 'inherit'
                       }}
                     >
-                      <Transaction
+                      {item.amount}
+                      {/* <Transaction
                         transaction={item}
                         categories={this.props.categories}
                         accounts={this.props.accounts}
@@ -971,15 +969,15 @@ export class TransactionList extends React.Component {
                         showCategory={this.props.showCategory}
                         added={this.props.isNew(item.id)}
                         style={item.isLast && { borderColor: colors.n9 }}
-                        onSelect={() => this.props.onSelect(item)}
-                      />
+                        onSelect={() => this.props.onSelect(item)} 
+                      />  */}
                     </Item>
                   );
                 })}
               </Section>
             );
           })}
-        </ListBox> */}
+        </ListBox>
       </>
     );
   }
@@ -1092,4 +1090,145 @@ function Option({ item, state }) {
       {item.rendered}
     </li>
   );
+}
+
+export class Transaction extends React.PureComponent {
+  render() {
+    const {
+      transaction,
+      accounts,
+      categories,
+      payees,
+      showCategory,
+      added,
+      onSelect,
+      style
+    } = this.props;
+    let {
+      id,
+      payee: payeeId,
+      amount,
+      category,
+      cleared,
+      is_parent,
+      notes,
+      schedule
+    } = transaction;
+    let categoryName = category ? lookupName(categories, category) : null;
+
+    let payee = payees && payeeId && getPayeesById(payees)[payeeId];
+    let transferAcct =
+      payee &&
+      payee.transfer_acct &&
+      getAccountsById(accounts)[payee.transfer_acct];
+
+    let prettyDescription = getDescriptionPretty(
+      transaction,
+      payee,
+      transferAcct
+    );
+    let prettyCategory = transferAcct
+      ? 'Transfer'
+      : is_parent
+      ? 'Split'
+      : categoryName;
+
+    let isPreview = isPreviewId(id);
+    let textStyle = isPreview && {
+      fontStyle: 'italic',
+      color: colors.n5
+    };
+    let textStyleWithColor = [
+      textStyle,
+      isPreview && {
+        color:
+          notes === 'missed'
+            ? colors.r6
+            : notes === 'due'
+            ? colors.y4
+            : colors.n5
+      }
+    ];
+
+    return (
+      <Button
+        onPress={() => onSelect(transaction)}
+        style={{ backgroundColor: 'white' }}
+        activeOpacity={0.1}
+      >
+        <ListItem
+          style={[
+            { flex: 1, height: 60 },
+            isPreview && { backgroundColor: colors.n11 },
+            style
+          ]}
+        >
+          <View style={[{ flex: 1 }]}>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              {schedule && (
+                <ArrowsSynchronize
+                  style={{
+                    width: 12,
+                    height: 12,
+                    marginRight: 5,
+                    color: textStyle.color || colors.n1
+                  }}
+                />
+              )}
+              <TextOneLine
+                style={[
+                  styles.text,
+                  textStyle,
+                  { fontSize: 14, fontWeight: added ? '600' : '400' },
+                  prettyDescription === '' && {
+                    color: colors.n6,
+                    fontStyle: 'italic'
+                  }
+                ]}
+              >
+                {prettyDescription || 'Empty'}
+              </TextOneLine>
+            </View>
+            {isPreview ? (
+              <Status status={notes} />
+            ) : (
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <CheckCircle1
+                  style={{
+                    width: 11,
+                    height: 11,
+                    color: cleared ? colors.g6 : colors.n8,
+                    marginRight: 5
+                  }}
+                />
+                {showCategory && (
+                  <TextOneLine
+                    style={{
+                      fontSize: 11,
+                      marginTop: 1,
+                      fontWeight: '400',
+                      color: prettyCategory ? colors.n3 : colors.p7,
+                      fontStyle: prettyCategory ? null : 'italic',
+                      textAlign: 'left'
+                    }}
+                  >
+                    {prettyCategory || 'Uncategorized'}
+                  </TextOneLine>
+                )}
+              </View>
+            )}
+          </View>
+          <Text
+            style={[
+              styles.text,
+              textStyle,
+              { marginLeft: 25, marginRight: 5, fontSize: 14 }
+            ]}
+          >
+            {integerToCurrency(amount)}
+          </Text>
+        </ListItem>
+      </Button>
+    );
+  }
 }
