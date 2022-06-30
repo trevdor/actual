@@ -284,7 +284,7 @@ export class BudgetCategory extends React.PureComponent {
 
     let content = (
       <ListItem
-        ref={el => (this.container = el)}
+        // ref={el => (this.container = el)}
         style={[
           {
             backgroundColor: editing ? colors.p11 : 'transparent',
@@ -650,7 +650,7 @@ export class BudgetGroup extends React.PureComponent {
         />
 
         {group.categories.map((category, index) => {
-          const editing = editingId === category.id;
+          // const editing = editingId === category.id;
           return (
             <BudgetCategory
               key={category.id}

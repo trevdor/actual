@@ -2,7 +2,7 @@ import React from 'react';
 
 export const withThemeColor = color => WrappedComponent => {
   class WithThemeColor extends React.Component {
-    componentWillMount() {
+    componentDidMount() {
       setThemeColor(color);
     }
 

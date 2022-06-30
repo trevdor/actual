@@ -128,6 +128,9 @@ function getStyles(isMobile) {
       paddingLeft: isMobile ? 2 : 20,
       paddingRight: isMobile ? 2 : 20
     },
+    settingsPageContent: {
+      padding: isMobile ? 20 : 'inherit'
+    },
     staticText: {
       cursor: 'default',
       userSelect: 'none'
