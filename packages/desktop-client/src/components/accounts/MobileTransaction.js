@@ -545,7 +545,7 @@ export class TransactionEdit extends React.Component {
                           paddingVertical: 6,
                           paddingHorizontal: 15
                         }}
-                        onPress={this.onAddSplit}
+                        onClick={this.onAddSplit}
                       >
                         Add split
                       </Button>
@@ -577,14 +577,14 @@ export class TransactionEdit extends React.Component {
                   />
                 </View>
 
-                <View style={{ marginHorizontal: 35 }}>
+                <View style={{ margin: 'auto 35px' }}>
                   <FieldLabel title="Cleared" />
                   <BooleanField
                     value={transaction.cleared}
                     onUpdate={value =>
                       this.onEdit(transaction, 'cleared', value)
                     }
-                    style={{ marginTop: 4 }}
+                    style={{ marginTop: 5 }}
                   />
                 </View>
               </View>
@@ -601,7 +601,7 @@ export class TransactionEdit extends React.Component {
               {!adding && (
                 <View style={{ alignItems: 'center' }}>
                   <Button
-                    onPress={() => onDelete()}
+                    onClick={onDelete}
                     style={{
                       paddingVertical: 5,
                       marginHorizontal: EDITING_PADDING,
@@ -634,7 +634,7 @@ export class TransactionEdit extends React.Component {
               }}
             >
               {adding ? (
-                <Button onPress={() => this.onAdd()}>
+                <Button onClick={this.onAdd}>
                   <Add width={17} height={17} style={{ color: colors.b3 }} />
                   <Text
                     style={[styles.text, { color: colors.b3, marginLeft: 5 }]}
@@ -643,7 +643,7 @@ export class TransactionEdit extends React.Component {
                   </Text>
                 </Button>
               ) : (
-                <Button onPress={() => this.onSave()}>
+                <Button onClick={this.onSave}>
                   <PencilWriteAlternate
                     style={{ width: 16, height: 16, color: colors.n1 }}
                   />
@@ -782,7 +782,7 @@ export class Transaction extends React.PureComponent {
 
     return (
       <Button
-        onPress={() => onSelect(transaction)}
+        onClick={() => onSelect(transaction)}
         style={{
           backgroundColor: 'white',
           border: 'none',
@@ -826,7 +826,13 @@ export class Transaction extends React.PureComponent {
             {isPreview ? (
               <Status status={notes} />
             ) : (
-              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  marginTop: 3
+                }}
+              >
                 <CheckCircle1
                   style={{
                     width: 11,
@@ -914,6 +920,7 @@ export class TransactionList extends React.Component {
         {scrollProps.ListHeaderComponent}
         <ListBox
           {...scrollProps}
+          aria-label="transaction list"
           label=""
           selectionMode="none"
           style={{ flex: '1 auto', height: '100%', overflowY: 'auto' }}
@@ -932,6 +939,7 @@ export class TransactionList extends React.Component {
                         fontSize:
                           index === transactions.length - 1 ? 98 : 'inherit'
                       }}
+                      textValue={transaction.id}
                     >
                       <Transaction
                         transaction={transaction}
