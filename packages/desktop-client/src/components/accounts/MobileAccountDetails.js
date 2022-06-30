@@ -41,7 +41,7 @@ class TransactionSearchInput extends React.Component {
         <Search width="20" height="20" style={{ color: colors.n7 }} />
         <Input
           value={text}
-          onChange={this.onChange}
+          onUpdate={this.onChange}
           placeholder={`Search ${accountName}`}
           style={{
             backgroundColor: colors.n11,

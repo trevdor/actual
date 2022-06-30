@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import debounce from 'debounce';
@@ -72,8 +72,7 @@ let paged;
 function Account(props) {
   const navigate = useNavigate();
   const [transactions, setTransactions] = useState([]);
-  const [filter, setFilter] = useState('');
-  //   const [rootQuery, setRootQuery] = useState();
+  const [searchText, setSearchText] = useState('');
   const [currentQuery, setCurrentQuery] = useState();
 
   let state = useSelector(state => ({
@@ -90,9 +89,6 @@ function Account(props) {
   ]);
 
   const { id: accountId } = props.match.params;
-
-  //   console.log('accountId', accountId);
-  //   console.log('account', account);
 
   const makeRootQuery = () => {
     const { id } = props.match.params || {};
@@ -113,7 +109,6 @@ function Account(props) {
 
   const fetchTransactions = async () => {
     let query = makeRootQuery();
-    // setRootQuery(query);
     setCurrentQuery(query);
     updateQuery(query);
   };
@@ -156,6 +151,22 @@ function Account(props) {
     return () => unlisten();
   }, []);
 
+  const updateSearchQuery = debounce(() => {
+    if (searchText === '' && currentQuery) {
+      updateQuery(currentQuery);
+    } else if (searchText && currentQuery) {
+      updateQuery(
+        queries.makeTransactionSearchQuery(
+          currentQuery,
+          searchText,
+          state.dateFormat
+        )
+      );
+    }
+  }, 150);
+
+  useEffect(updateSearchQuery, [searchText, currentQuery, state.dateFormat]);
+
   if (!props.accounts || !props.accounts.length || !props.match) {
     return null;
   }
@@ -168,27 +179,10 @@ function Account(props) {
 
   const onSearch = async text => {
     paged.unsubscribe();
-    setFilter(text);
-    onSearchDone();
+    setSearchText(text);
   };
 
-  const onSearchDone = debounce(() => {
-    if (filter === '') {
-      updateQuery(currentQuery);
-    } else {
-      updateQuery(
-        queries.makeTransactionSearchQuery(
-          currentQuery,
-          filter,
-          state.dateFormat
-        )
-      );
-    }
-  }, 150);
-
   const onSelectTransaction = transaction => {
-    const { transactions } = this.state;
-
     if (isPreviewId(transaction.id)) {
       let parts = transaction.id.split('/');
       let scheduleId = parts[1];
@@ -241,7 +235,7 @@ function Account(props) {
     <SyncRefresh onSync={onRefresh}>
       {({ refreshing, onRefresh }) => (
         <SchedulesProvider
-          transform={getSchedulesTransform(accountId, filter !== '')}
+          transform={getSchedulesTransform(accountId, searchText !== '')}
         >
           {/* <FocusAwareStatusBar barStyle="dark-content" animated={true} /> // TODO: how to do this on web? */}
           <PreviewTransactions accountId={props.accountId}>
