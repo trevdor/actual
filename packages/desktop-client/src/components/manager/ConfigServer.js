@@ -6,18 +6,30 @@ import {
   View,
   Text,
   Button,
-  ButtonWithLoading
+  ButtonWithLoading,
+  ExternalLink
 } from 'loot-design/src/components/common';
 import { colors, styles } from 'loot-design/src/style';
 import { signOut, loggedIn } from 'loot-core/src/client/actions/user';
 import { send } from 'loot-core/src/platform/client/fetch';
-import {
-  useBootstrapped,
-  Title,
-  Input,
-  Link,
-  ExternalLink
-} from './subscribe/common';
+import { useBootstrapped, Title, Input, Link } from './subscribe/common';
+
+function Version() {
+  return (
+    <ExternalLink
+      style={{
+        color: colors.n7,
+        margin: 15,
+        marginRight: 17,
+        ':hover': { color: colors.n2 },
+        zIndex: 5001
+      }}
+      href={'https://actualbudget.com/blog/' + window.Actual.ACTUAL_VERSION}
+    >
+      Actual {window.Actual.ACTUAL_VERSION}
+    </ExternalLink>
+  );
+}
 
 export default function ConfigServer() {
   let dispatch = useDispatch();
@@ -76,7 +88,7 @@ export default function ConfigServer() {
 
   return (
     <>
-      <View style={{ width: 500, marginTop: -30 }}>
+      <View style={{ maxWidth: 500, marginTop: -30 }}>
         <Title text="Where's the server?" />
 
         <Text
@@ -164,6 +176,7 @@ export default function ConfigServer() {
           </View>
         )}
       </View>
+      <Version />
     </>
   );
 }
