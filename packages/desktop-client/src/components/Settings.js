@@ -511,7 +511,7 @@ function SettingsLink({ to, name, style, first, last }) {
   );
 }
 
-function Version() {
+export function Version() {
   const version = useServerVersion();
   let styles = isMobile() ? mobileStyles : desktopStyles;
 
@@ -520,11 +520,9 @@ function Version() {
       style={[
         {
           alignSelf: 'center',
-          color: colors.n7,
-          ':hover': { color: colors.n2 },
+          color: 'inherit',
           padding: '6px 10px'
         },
-        styles.staticText,
         styles.smallText
       ]}
     >
@@ -565,8 +563,9 @@ class Settings extends React.Component {
         </View>
         <View
           style={{
-            flexDirection: 'row',
             alignSelf: 'center',
+            color: colors.n2,
+            flexDirection: 'row',
             margin: '0 0 10px 0'
           }}
         >

@@ -16,29 +16,6 @@ import Bootstrap from './subscribe/Bootstrap';
 import Error from './subscribe/Error';
 import ChangePassword from './subscribe/ChangePassword';
 import ConfigServer from './ConfigServer';
-import useServerVersion from '../../hooks/useServerVersion';
-
-function Version() {
-  const version = useServerVersion();
-
-  return (
-    <Text
-      style={{
-        position: 'absolute',
-        bottom: 0,
-        right: 0,
-        color: colors.n7,
-        margin: 15,
-        marginRight: 17,
-        ':hover': { color: colors.n2 },
-        zIndex: 5001
-      }}
-      href={'https://actualbudget.com/blog/' + window.Actual.ACTUAL_VERSION}
-    >
-      {`App: v${window.Actual.ACTUAL_VERSION} | Server: ${version}`}
-    </Text>
-  );
-}
 
 class ManagementApp extends React.Component {
   constructor(props) {
@@ -170,13 +147,14 @@ class ManagementApp extends React.Component {
           {!isHidden && (
             <View
               style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
+                alignItems: 'center',
                 bottom: 0,
                 justifyContent: 'center',
-                alignItems: 'center'
+                left: 0,
+                padding: 20,
+                position: 'absolute',
+                right: 0,
+                top: 0
               }}
             >
               {userData ? (
@@ -221,26 +199,21 @@ class ManagementApp extends React.Component {
               )}
             </View>
           )}
-
           <ServerURL />
-          <Version />
         </View>
       </Router>
     );
   }
 }
 
-export default connect(
-  state => {
-    let { modalStack } = state.modals;
+export default connect(state => {
+  let { modalStack } = state.modals;
 
-    return {
-      files: state.budgets.allFiles,
-      userData: state.user.data,
-      managerHasInitialized: state.app.managerHasInitialized,
-      loadingText: state.app.loadingText,
-      currentModals: modalStack.map(modal => modal.name)
-    };
-  },
-  actions
-)(ManagementApp);
+  return {
+    files: state.budgets.allFiles,
+    userData: state.user.data,
+    managerHasInitialized: state.app.managerHasInitialized,
+    loadingText: state.app.loadingText,
+    currentModals: modalStack.map(modal => modal.name)
+  };
+}, actions)(ManagementApp);

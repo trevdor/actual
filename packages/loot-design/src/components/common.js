@@ -34,6 +34,7 @@ import View from './View';
 import Text from './Text';
 import Stack from './Stack';
 import { useProperFocus } from './useProperFocus';
+import { isMobile } from '../../../desktop-client/src/util';
 
 export View from './View';
 export Text from './Text';
@@ -873,7 +874,7 @@ export function Modal({
         style={[
           {
             willChange: 'opacity, transform',
-            minWidth: 500,
+            minWidth: isMobile() ? '100%' : 500,
             minHeight: 0,
             boxShadow: styles.shadowLarge,
             borderRadius: 4,
