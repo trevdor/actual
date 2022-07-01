@@ -70,6 +70,36 @@ export function Block(props) {
   );
 }
 
+export const Card = React.forwardRef(({ children, ...props }, ref) => {
+  return (
+    <View
+      {...props}
+      ref={ref}
+      style={[
+        {
+          marginTop: 15,
+          marginLeft: 5,
+          marginRight: 5,
+          borderRadius: 6,
+          backgroundColor: 'white',
+          borderColor: colors.p3,
+          boxShadow: '0 1px 2px #9594A8'
+        },
+        props.style
+      ]}
+    >
+      <View
+        style={{
+          borderRadius: 6,
+          overflow: 'hidden'
+        }}
+      >
+        {children}
+      </View>
+    </View>
+  );
+});
+
 export function Link({ style, children, ...nativeProps }) {
   return (
     <Button
@@ -393,6 +423,33 @@ export function InputWithContent({
       />
       {rightContent}
     </View>
+  );
+}
+
+export function KeyboardButton({ highlighted, children, ...props }) {
+  return (
+    <Button
+      {...props}
+      bare
+      style={[
+        {
+          backgroundColor: 'white',
+          shadowColor: colors.n3,
+          shadowOffset: { width: 0, height: 1 },
+          shadowRadius: 1,
+          shadowOpacity: 1,
+          elevation: 4,
+          borderWidth: 0,
+          paddingLeft: 17,
+          paddingRight: 17
+        },
+        highlighted && { backgroundColor: colors.p6 },
+        props.style
+      ]}
+      textStyle={[highlighted && { color: 'white' }]}
+    >
+      {children}
+    </Button>
   );
 }
 

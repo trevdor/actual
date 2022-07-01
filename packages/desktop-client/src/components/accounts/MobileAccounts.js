@@ -208,9 +208,10 @@ export class AccountList extends React.Component {
             backgroundColor: colors.b2,
             color: 'white',
             flexDirection: 'row',
+            flex: '1 0 auto',
             fontSize: 18,
             fontWeight: 500,
-            height: 70,
+            height: 50,
             justifyContent: 'center',
             overflowY: 'auto',
             paddingBottom: 10

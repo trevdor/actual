@@ -20,6 +20,7 @@ import { colors, styles } from 'loot-design/src/style';
 import { View } from 'loot-design/src/components/common';
 import { default as MobileAccounts } from './accounts/MobileAccounts';
 import { default as MobileAccount } from './accounts/MobileAccount';
+import { default as MobileBudget } from './budget/MobileBudget';
 import BankSyncStatus from './BankSyncStatus';
 import { BudgetMonthCountProvider } from 'loot-design/src/components/budget/BudgetMonthCountContext';
 import Wallet from 'loot-design/src/svg/v1/Wallet';
@@ -98,7 +99,10 @@ function Routes({ isMobile, location }) {
           <Route path="/" exact render={() => <Redirect to="/budget" />} />
 
           <PageRoute path="/reports" component={Reports} />
-          <PageRoute path="/budget" component={Budget} />
+          <PageRoute
+            path="/budget"
+            component={isMobile ? MobileBudget : Budget}
+          />
 
           <Route path="/schedules" exact component={Schedules} />
           <Route path="/schedule/edit" exact component={EditSchedule} />
@@ -191,17 +195,15 @@ function MobileNavTabs() {
   return (
     <div
       style={{
-        alignItems: 'center',
         backgroundColor: 'white',
         borderTop: `1px solid ${colors.n10}`,
         bottom: 0,
         boxShadow: styles.shadow,
         display: 'flex',
-        height: '75px',
+        height: '80px',
         justifyContent: 'space-around',
-        // position: 'absolute',
+        paddingTop: 10,
         width: '100%'
-        // zIndex: '100'
       }}
     >
       <NavTab name="Budget" path="/budget" icon={Wallet} isActive={false} />

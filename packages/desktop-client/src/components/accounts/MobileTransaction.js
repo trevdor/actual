@@ -1024,15 +1024,15 @@ function ListBoxSection({ section, state }) {
           <div
             {...headingProps}
             style={{
+              ...styles.smallText,
               backgroundColor: colors.n10,
               borderBottom: `1px solid ${colors.n9}`,
               borderTop: `1px solid ${colors.n9}`,
-              color: colors.n5,
+              color: colors.n4,
               display: 'flex',
-              fontSize: 16,
               justifyContent: 'center',
-              paddingBottom: 5,
-              paddingTop: 5,
+              paddingBottom: 4,
+              paddingTop: 4,
               position: 'sticky',
               top: '0',
               width: '100%',
@@ -1103,7 +1103,8 @@ export const ListItem = React.forwardRef(
             height: ROW_HEIGHT,
             flexDirection: 'row',
             alignItems: 'center',
-            paddingHorizontal: 10
+            paddingLeft: 10,
+            paddingRight: 10
           },
           style
         ]}

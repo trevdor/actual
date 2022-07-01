@@ -212,7 +212,7 @@ export const mobileStyles = {
     headerTitleStyle: {
       color: colors.n1,
       fontSize: 15,
-      fontWeight: '600'
+      fontWeight: 600
     },
     headerBackTitle: null
   },
@@ -223,15 +223,15 @@ export const mobileStyles = {
   },
   smallText: {
     color: colors.n1,
+    fontSize: 15
+    // lineHeight: 21 // TODO: This seems like trouble, but what's the right value?
+  },
+  mediumText: {
     fontSize: 15,
-    lineHeight: 21
+    fontWeight: 500
   },
   shadow: {
-    shadowColor: '#9594A8',
-    shadowOffset: { width: 0, height: 1 },
-    shadowRadius: 1,
-    shadowOpacity: 1,
-    elevation: 2
+    boxShadow: '0 1px 1px 2px #9594A8'
   },
   shadowLarge: {
     shadowColor: '#9594A8',
