@@ -226,8 +226,8 @@ export const mobileStyles = {
   },
   smallText: {
     color: colors.n1,
-    fontSize: 15,
-    lineHeight: 21
+    fontSize: 15
+    // lineHeight: 21 // TODO: This seems like trouble, but what's the right value?
   },
   shadow: {
     shadowColor: '#9594A8',
