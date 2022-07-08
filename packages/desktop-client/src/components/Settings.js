@@ -156,13 +156,7 @@ function Advanced({ prefs, userData, pushModal, resetSync }) {
   );
 }
 
-function GlobalSettings({
-  globalPrefs,
-  userData,
-  saveGlobalPrefs,
-  pushModal,
-  closeBudget
-}) {
+function GlobalSettings({ globalPrefs, userData, saveGlobalPrefs, pushModal }) {
   let [documentDirChanged, setDirChanged] = useState(false);
   let dirScrolled = useRef(null);
 
@@ -253,16 +247,22 @@ function GlobalSettings({
           }}
         >
           <input
+            id="autoUpdate"
             type="checkbox"
             checked={globalPrefs.autoUpdate}
-            style={{ marginRight: 5 }}
+            style={{
+              marginRight: 5,
+              ...(isMobile() && { height: 20, marginTop: 0, width: 32 })
+            }}
             onChange={onAutoUpdate}
           />
 
           <View>
-            <Text style={{ fontSize: 15 }}>
-              Automatically check for updates
-            </Text>
+            <label htmlFor="autoUpdate">
+              <Text style={{ fontSize: 15 }}>
+                Automatically check for updates
+              </Text>
+            </label>
             <View
               style={{
                 color: colors.n2,
@@ -290,16 +290,22 @@ function GlobalSettings({
           }}
         >
           <input
+            id="trackUsage"
             type="checkbox"
             checked={globalPrefs.trackUsage}
-            style={{ marginRight: 5 }}
+            style={{
+              marginRight: 5,
+              ...(isMobile() && { height: 20, marginTop: 0, width: 32 })
+            }}
             onChange={onTrackUsage}
           />
 
           <View>
-            <Text style={{ fontSize: 15 }}>
-              Send basic usage statistics back to Actual{"'"}s servers
-            </Text>
+            <label htmlFor="trackUsage">
+              <Text style={{ fontSize: 15 }}>
+                Send basic usage statistics back to Actual{"'"}s servers
+              </Text>
+            </label>
             <View
               style={{
                 color: colors.n2,
@@ -355,7 +361,23 @@ function FileSettings({
 
   return (
     <View>
-      <View style={{ marginTop: 30 }}>
+      <View style={{ marginTop: isMobile() ? 'auto' : 30 }}>
+        {isMobile() && (
+          <View style={{ alignItems: 'center', marginBottom: 30 }}>
+            <Text
+              style={[mobileStyles.text, { fontWeight: '600', fontSize: 17 }]}
+            >
+              {prefs.budgetName}
+            </Text>
+            <Button
+              onClick={() => actions.closeBudget()}
+              style={{ marginTop: 10 }}
+            >
+              Close Budget
+            </Button>
+          </View>
+        )}
+
         <Title name="Formatting" />
 
         <Text>
@@ -383,7 +405,7 @@ function FileSettings({
             onChange={onNumberFormat}
           >
             {numberFormats.map(f => (
-              <option value={f.value} selected={f.value === numberFormat}>
+              <option key={f.value} value={f.value} defaultValue={numberFormat}>
                 {f.label}
               </option>
             ))}
@@ -575,7 +597,6 @@ class Settings extends React.Component {
                   userData={userData}
                   saveGlobalPrefs={this.props.saveGlobalPrefs}
                   pushModal={this.props.pushModal}
-                  closeBudget={this.props.closeBudget}
                 />
               </Route>
               <Route path={`${match.path}/file`}>

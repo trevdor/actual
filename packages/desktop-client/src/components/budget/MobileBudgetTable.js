@@ -284,7 +284,7 @@ export class BudgetCategory extends React.PureComponent {
 
     let content = (
       <ListItem
-        ref={el => (this.container = el)}
+        // ref={el => (this.container = el)}
         style={[
           {
             backgroundColor: editing ? colors.p11 : 'transparent',
