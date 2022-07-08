@@ -14,7 +14,7 @@ import CellValue from 'loot-design/src/components/spreadsheet/CellValue';
 import * as actions from 'loot-core/src/client/actions';
 import * as queries from 'loot-core/src/client/queries';
 import { isMobile } from '../../util';
-import { useSetMobileThemeColor } from 'loot-design/src/components/hooks';
+import { withThemeColor } from 'loot-design/src/util/withThemeColor';
 
 export function AccountHeader({ name, amount }) {
   return (
@@ -280,7 +280,6 @@ export class AccountList extends React.Component {
 }
 
 function Accounts(props) {
-  useSetMobileThemeColor(colors.b2);
   const transactions = useState({});
   const navigate = useNavigate();
 
@@ -354,4 +353,4 @@ export default connect(
     prefs: state.prefs.local
   }),
   actions
-)(Accounts);
+)(withThemeColor(colors.b2)(Accounts));

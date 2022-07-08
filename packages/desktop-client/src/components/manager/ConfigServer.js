@@ -11,15 +11,11 @@ import {
 import { colors, styles } from 'loot-design/src/style';
 import { signOut, loggedIn } from 'loot-core/src/client/actions/user';
 import { send } from 'loot-core/src/platform/client/fetch';
-import {
-  useBootstrapped,
-  Title,
-  Input,
-  Link,
-  ExternalLink
-} from './subscribe/common';
+import { Title, Input } from './subscribe/common';
+import { useSetThemeColor } from 'loot-design/src/components/hooks';
 
 export default function ConfigServer() {
+  useSetThemeColor(colors.p5);
   let dispatch = useDispatch();
   let history = useHistory();
   let [url, setUrl] = useState('');
