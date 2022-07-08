@@ -23,6 +23,8 @@ import CheveronDown from 'loot-design/src/svg/v1/CheveronDown';
 import ExpandArrow from 'loot-design/src/svg/ExpandArrow';
 import ExclamationSolid from 'loot-design/src/svg/v1/ExclamationSolid';
 import Platform from 'loot-core/src/client/platform';
+import { isMobile } from '../util';
+import { useSetMobileThemeColor } from 'loot-design/src/components/hooks';
 
 import useServerVersion from '../hooks/useServerVersion';
 
@@ -320,6 +322,8 @@ function FileSettings({
   setAppState,
   signOut
 }) {
+  useSetMobileThemeColor(colors.n10, { skip: !isMobile() });
+
   function onDateFormat(e) {
     let format = e.target.value;
     savePrefs({ dateFormat: format });

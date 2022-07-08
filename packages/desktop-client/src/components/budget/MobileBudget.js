@@ -22,6 +22,7 @@ import {
   moveCategory,
   moveCategoryGroup
 } from 'loot-core/src/shared/categories.js';
+import { useSetMobileThemeColor } from 'loot-design/src/components/hooks';
 
 function BudgetSummary({ month, onClose }) {
   const prevMonthName = monthUtils.format(monthUtils.prevMonth(month), 'MMM');
@@ -417,6 +418,7 @@ class Budget extends React.Component {
 
 function BudgetWrapper(props) {
   let spreadsheet = useContext(SpreadsheetContext);
+  useSetMobileThemeColor(colors.p5);
   return <Budget {...props} spreadsheet={spreadsheet} />;
 }
 
