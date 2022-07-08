@@ -656,7 +656,7 @@ export class BudgetGroup extends React.PureComponent {
               key={category.id}
               index={index}
               category={category}
-              editing={editing}
+              editing={undefined} //editing}
               editMode={editMode}
               gestures={gestures}
               month={month}
@@ -769,7 +769,7 @@ export class BudgetGroups extends React.Component {
               key={group.id}
               group={group}
               editingId={editingId}
-              editMode={editMode}
+              editMode={undefined} //editMode}
               gestures={gestures}
               month={month}
               onEditCategory={onEditCategory}
@@ -1015,7 +1015,7 @@ export class BudgetTable extends React.Component {
                     editingId={editingCategory}
                     editMode={editMode}
                     gestures={this.gestures}
-                    onEditCategory={this.onEditCategory}
+                    onEditCategory={() => {}} //this.onEditCategory}
                     onAddCategory={onAddCategory}
                     onReorderCategory={onReorderCategory}
                     onReorderGroup={onReorderGroup}
