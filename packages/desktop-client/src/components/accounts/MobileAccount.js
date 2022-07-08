@@ -26,6 +26,8 @@ import {
   getCategories,
   initiallyLoadPayees
 } from 'loot-core/src/client/actions';
+import { withThemeColor } from 'loot-design/src/util/withThemeColor';
+import { colors } from 'loot-design/src/style';
 
 const getSchedulesTransform = memoizeOne((id, hasSearch) => {
   let filter = queries.getAccountFilter(id, '_account');
@@ -283,4 +285,4 @@ export default connect(
     prefs: state.prefs.local
   }),
   actions
-)(Account);
+)(withThemeColor(colors.n11)(Account));

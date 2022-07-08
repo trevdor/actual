@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { setThemeColor } from '../util/withThemeColor';
 
 export function useScrollFlasher() {
   let scrollRef = useRef(null);
@@ -14,11 +15,9 @@ export function useScrollFlasher() {
   return scrollRef;
 }
 
-export function useSetMobileThemeColor(color, opts) {
+export function useSetThemeColor(color, opts) {
   useEffect(() => {
     if (opts && opts.skip) return;
-    const metaTags = document.getElementsByTagName('meta');
-    const themeTag = [...metaTags].find(tag => tag.name === 'theme-color');
-    themeTag.setAttribute('content', color);
+    setThemeColor(color);
   });
 }
