@@ -14,6 +14,7 @@ import { TransactionList } from './Transactions';
 import CellValue from 'loot-design/src/components/spreadsheet/CellValue';
 import * as actions from 'loot-core/src/client/actions';
 import * as queries from 'loot-core/src/client/queries';
+import { useSetMobileThemeColor } from 'loot-design/src/components/hooks';
 
 export function AccountHeader({ name, amount }) {
   return (
@@ -273,6 +274,7 @@ export class AccountList extends React.Component {
 }
 
 function Accounts(props) {
+  useSetMobileThemeColor(colors.b2);
   const transactions = useState({});
   const navigate = useNavigate();
 

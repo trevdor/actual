@@ -21,6 +21,7 @@ import { Information } from 'loot-design/src/components/alerts';
 import ExpandArrow from 'loot-design/src/svg/ExpandArrow';
 import Platform from 'loot-core/src/client/platform';
 import { isMobile } from '../util';
+import { useSetMobileThemeColor } from 'loot-design/src/components/hooks';
 
 import useServerVersion from '../hooks/useServerVersion';
 
@@ -326,6 +327,8 @@ function FileSettings({
   setAppState,
   signOut
 }) {
+  useSetMobileThemeColor(colors.n10, { skip: !isMobile() });
+
   function onDateFormat(e) {
     let format = e.target.value;
     savePrefs({ dateFormat: format });
