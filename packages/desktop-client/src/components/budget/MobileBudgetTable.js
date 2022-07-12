@@ -650,7 +650,7 @@ export class BudgetGroup extends React.PureComponent {
         />
 
         {group.categories.map((category, index) => {
-          const editing = editingId === category.id;
+          // const editing = editingId === category.id;
           return (
             <BudgetCategory
               key={category.id}

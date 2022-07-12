@@ -331,8 +331,8 @@ class Budget extends React.Component {
           case 4:
             if (budgetType === 'report') {
               this.onBudgetAction('set-all-future');
-              break;
             }
+            break;
           default:
         }
       }

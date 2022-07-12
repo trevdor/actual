@@ -370,7 +370,7 @@ function FileSettings({
               {prefs.budgetName}
             </Text>
             <Button
-              onClick={() => actions.closeBudget()}
+              onClick={async () => await actions.closeBudget()()}
               style={{ marginTop: 10 }}
             >
               Close Budget
@@ -620,12 +620,14 @@ class Settings extends React.Component {
   }
 }
 
-export default connect(
-  state => ({
-    prefs: state.prefs.local,
-    globalPrefs: state.prefs.global,
-    localServerURL: state.account.localServerURL,
-    userData: state.user.data
-  }),
-  actions
-)(withThemeColor(colors.n10)(Settings));
+export default withThemeColor(colors.n10)(
+  connect(
+    state => ({
+      prefs: state.prefs.local,
+      globalPrefs: state.prefs.global,
+      localServerURL: state.account.localServerURL,
+      userData: state.user.data
+    }),
+    actions
+  )(Settings)
+);
