@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import * as actions from 'loot-core/src/client/actions';
 import {
   View,
   Text,
@@ -9,13 +8,16 @@ import {
   ButtonWithLoading,
   ExternalLink
 } from 'loot-design/src/components/common';
-import { colors, styles } from 'loot-design/src/style';
+import { colors } from 'loot-design/src/style';
 import { signOut, loggedIn } from 'loot-core/src/client/actions/user';
 import { send } from 'loot-core/src/platform/client/fetch';
-import { useBootstrapped, Title, Input, Link } from './subscribe/common';
+import { Title, Input } from './subscribe/common';
 import { useSetThemeColor } from 'loot-design/src/components/hooks';
+import useServerVersion from '../../hooks/useServerVersion';
 
 function Version() {
+  const version = useServerVersion();
+
   return (
     <ExternalLink
       style={{
@@ -27,7 +29,7 @@ function Version() {
       }}
       href={'https://actualbudget.com/blog/' + window.Actual.ACTUAL_VERSION}
     >
-      Actual {window.Actual.ACTUAL_VERSION}
+      App: v${window.Actual.ACTUAL_VERSION} | Server: ${version}
     </ExternalLink>
   );
 }

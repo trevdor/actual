@@ -514,6 +514,7 @@ function SettingsLink({ to, name, style, first, last }) {
 
 function Version() {
   const version = useServerVersion();
+  let styles = isMobile() ? mobileStyles : desktopStyles;
 
   return (
     <Text
