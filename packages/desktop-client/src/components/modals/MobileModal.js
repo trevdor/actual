@@ -91,7 +91,8 @@ class Modal extends React.Component {
                 borderRadius: 4,
                 overflow: 'hidden',
                 backgroundColor: backgroundColor || colors.n11,
-                flex: 1
+                flex: 1,
+                zIndex: 1
               },
               style
             ]}
@@ -102,8 +103,7 @@ class Modal extends React.Component {
               style={{
                 alignSelf: 'stretch',
                 alignItems: 'center',
-                paddingVertical: 15,
-                paddingLeft: 15,
+                padding: 15,
                 backgroundColor: backgroundColor || colors.n11,
                 borderColor: colors.n10,
                 borderBottomWidth: 1

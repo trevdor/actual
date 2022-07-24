@@ -41,14 +41,13 @@ function BudgetSummary({ month, onClose }) {
               paddingBottom: 15
             }}
           >
-            <Text
+            <View
               style={[
                 styles.text,
                 {
                   fontWeight: '600',
                   textAlign: 'right',
-                  marginRight: 10,
-                  lineHeight: 23
+                  marginRight: 10
                 }
               ]}
             >
@@ -56,32 +55,35 @@ function BudgetSummary({ month, onClose }) {
                 binding={rolloverBudget.incomeAvailable}
                 type="financial"
               />
-              {'\n'}
               <CellValue
                 binding={rolloverBudget.lastMonthOverspent}
                 type="financial"
               />
-              {'\n'}
               <CellValue
                 binding={rolloverBudget.totalBudgeted}
                 type="financial"
               />
-              {'\n'}
               <CellValue
                 binding={rolloverBudget.forNextMonth}
                 type="financial"
               />
-            </Text>
+            </View>
 
-            <Text style={[styles.text, { textAlign: 'left', lineHeight: 23 }]}>
+            <View
+              style={[
+                styles.text,
+                {
+                  display: 'flex',
+                  flexDirection: 'column',
+                  textAlign: 'left'
+                }
+              ]}
+            >
               <Text>Available Funds</Text>
-              {'\n'}
               <Text>Overspent in {prevMonthName}</Text>
-              {'\n'}
               <Text>Budgeted</Text>
-              {'\n'}
               <Text>For Next Month</Text>
-            </Text>
+            </View>
           </View>
 
           <View style={{ alignItems: 'center', marginBottom: 15 }}>
