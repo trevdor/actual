@@ -145,11 +145,11 @@ class Modal extends React.Component {
   }
 }
 
-const _Modal = Modal;
+const ModalHack = Modal;
 
 export default React.forwardRef(function Modal(props, ref) {
   return (
-    <_Modal
+    <ModalHack
       {...props}
       onRef={modal => {
         // TODO: This is a hacky bugfix. We need to expose the internal
