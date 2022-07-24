@@ -781,94 +781,94 @@ export class Transaction extends React.PureComponent {
     };
 
     return (
-      <Button
-        onClick={() => onSelect(transaction)}
-        style={{
-          backgroundColor: 'white',
-          border: 'none',
-          width: '100%',
-          '&:active': { opacity: 0.1 }
-        }}
+      // <Button
+      //   onClick={() => onSelect(transaction)}
+      //   style={{
+      //     backgroundColor: 'white',
+      //     border: 'none',
+      //     width: '100%',
+      //     '&:active': { opacity: 0.1 }
+      //   }}
+      // >
+      <ListItem
+        style={[
+          { flex: 1, height: 60, padding: '5px 10px' }, // remove padding when Button is back
+          isPreview && { backgroundColor: colors.n11 },
+          style
+        ]}
       >
-        <ListItem
+        <View style={[{ flex: 1 }]}>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            {schedule && (
+              <ArrowsSynchronize
+                style={{
+                  width: 12,
+                  height: 12,
+                  marginRight: 5,
+                  color: textStyle.color || colors.n1
+                }}
+              />
+            )}
+            <TextOneLine
+              style={[
+                styles.text,
+                textStyle,
+                { fontSize: 14, fontWeight: added ? '600' : '400' },
+                prettyDescription === '' && {
+                  color: colors.n6,
+                  fontStyle: 'italic'
+                }
+              ]}
+            >
+              {prettyDescription || 'Empty'}
+            </TextOneLine>
+          </View>
+          {isPreview ? (
+            <Status status={notes} />
+          ) : (
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                marginTop: 3
+              }}
+            >
+              <CheckCircle1
+                style={{
+                  width: 11,
+                  height: 11,
+                  color: cleared ? colors.g6 : colors.n8,
+                  marginRight: 5
+                }}
+              />
+              {showCategory && (
+                <TextOneLine
+                  style={{
+                    fontSize: 11,
+                    marginTop: 1,
+                    fontWeight: '400',
+                    color: prettyCategory ? colors.n3 : colors.p7,
+                    fontStyle: prettyCategory ? null : 'italic',
+                    textAlign: 'left'
+                  }}
+                >
+                  {prettyCategory || 'Uncategorized'}
+                </TextOneLine>
+              )}
+            </View>
+          )}
+        </View>
+        <Text
           style={[
-            { flex: 1, height: 60 },
-            isPreview && { backgroundColor: colors.n11 },
-            style
+            styles.text,
+            textStyle,
+            { marginLeft: 25, marginRight: 5, fontSize: 14 }
           ]}
         >
-          <View style={[{ flex: 1 }]}>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              {schedule && (
-                <ArrowsSynchronize
-                  style={{
-                    width: 12,
-                    height: 12,
-                    marginRight: 5,
-                    color: textStyle.color || colors.n1
-                  }}
-                />
-              )}
-              <TextOneLine
-                style={[
-                  styles.text,
-                  textStyle,
-                  { fontSize: 14, fontWeight: added ? '600' : '400' },
-                  prettyDescription === '' && {
-                    color: colors.n6,
-                    fontStyle: 'italic'
-                  }
-                ]}
-              >
-                {prettyDescription || 'Empty'}
-              </TextOneLine>
-            </View>
-            {isPreview ? (
-              <Status status={notes} />
-            ) : (
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  marginTop: 3
-                }}
-              >
-                <CheckCircle1
-                  style={{
-                    width: 11,
-                    height: 11,
-                    color: cleared ? colors.g6 : colors.n8,
-                    marginRight: 5
-                  }}
-                />
-                {showCategory && (
-                  <TextOneLine
-                    style={{
-                      fontSize: 11,
-                      marginTop: 1,
-                      fontWeight: '400',
-                      color: prettyCategory ? colors.n3 : colors.p7,
-                      fontStyle: prettyCategory ? null : 'italic',
-                      textAlign: 'left'
-                    }}
-                  >
-                    {prettyCategory || 'Uncategorized'}
-                  </TextOneLine>
-                )}
-              </View>
-            )}
-          </View>
-          <Text
-            style={[
-              styles.text,
-              textStyle,
-              { marginLeft: 25, marginRight: 5, fontSize: 14 }
-            ]}
-          >
-            {integerToCurrency(amount)}
-          </Text>
-        </ListItem>
-      </Button>
+          {integerToCurrency(amount)}
+        </Text>
+      </ListItem>
+      // </Button>
     );
   }
 }
@@ -948,7 +948,7 @@ export class TransactionList extends React.Component {
                         payees={this.props.payees}
                         showCategory={this.props.showCategory}
                         added={this.props.isNew(transaction.id)}
-                        onSelect={() => this.props.onSelect(transaction)}
+                        onSelect={() => {}} //this.props.onSelect(transaction)}
                       />
                     </Item>
                   );

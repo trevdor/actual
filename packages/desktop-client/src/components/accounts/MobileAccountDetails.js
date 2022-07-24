@@ -10,7 +10,6 @@ import Search from 'loot-design/src/svg/v1/Search';
 import { colors } from 'loot-design/src/style';
 import { Link } from 'react-router-dom';
 import Text from 'loot-design/src/components/Text';
-import { useNavigate } from 'react-router-dom-v5-compat';
 
 class TransactionSearchInput extends React.Component {
   state = { text: '' };
