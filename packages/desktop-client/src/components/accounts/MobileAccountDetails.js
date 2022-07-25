@@ -135,11 +135,11 @@ export default function AccountDetails({
             {account.name}
           </View>
           {/* TODO: connect to an add transaction modal */}
-          <Link to="transaction/new" style={{ visibility: 'hidden' }}>
+          {/* <Link to="transaction/new" style={{ visibility: 'hidden' }}>
             <Button bare style={{ justifyContent: 'center', width: 65 }}>
               <Add width={20} height={20} />
             </Button>
-          </Link>
+          </Link> */}
         </View>
         <Label title="BALANCE" style={{ marginTop: 10 }} />
         <CellValue
