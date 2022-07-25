@@ -16,6 +16,29 @@ import Bootstrap from './subscribe/Bootstrap';
 import Error from './subscribe/Error';
 import ChangePassword from './subscribe/ChangePassword';
 import ConfigServer from './ConfigServer';
+import useServerVersion from '../../hooks/useServerVersion';
+
+function Version() {
+  const version = useServerVersion();
+
+  return (
+    <Text
+      style={{
+        position: 'absolute',
+        bottom: 0,
+        right: 0,
+        color: colors.n7,
+        margin: 15,
+        marginRight: 17,
+        ':hover': { color: colors.n2 },
+        zIndex: 5001
+      }}
+      href={'https://actualbudget.com/blog/' + window.Actual.ACTUAL_VERSION}
+    >
+      {`App: v${window.Actual.ACTUAL_VERSION} | Server: ${version}`}
+    </Text>
+  );
+}
 
 class ManagementApp extends React.Component {
   constructor(props) {
@@ -200,6 +223,7 @@ class ManagementApp extends React.Component {
             </View>
           )}
           <ServerURL />
+          <Version />
         </View>
       </Router>
     );
