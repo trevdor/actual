@@ -12,6 +12,24 @@ import { signOut, loggedIn } from 'loot-core/src/client/actions/user';
 import { send } from 'loot-core/src/platform/client/fetch';
 import { Title, Input } from './subscribe/common';
 import { useSetThemeColor } from 'loot-design/src/components/hooks';
+import useServerVersion from '../../hooks/useServerVersion';
+
+function Version() {
+  const version = useServerVersion();
+
+  return (
+    <Text
+      style={{
+        color: colors.n7,
+        margin: 15,
+        ':hover': { color: colors.n2 },
+        zIndex: 5001
+      }}
+    >
+      App: v{window.Actual.ACTUAL_VERSION} | Server: {version}
+    </Text>
+  );
+}
 
 export default function ConfigServer() {
   useSetThemeColor(colors.p5);
@@ -159,6 +177,7 @@ export default function ConfigServer() {
           </View>
         )}
       </View>
+      <Version />
     </>
   );
 }
