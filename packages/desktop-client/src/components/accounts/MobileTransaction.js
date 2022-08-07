@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Button,
   Text,
@@ -48,10 +48,8 @@ import Trash from 'loot-design/src/svg/v1/Trash';
 import { useListState } from '@react-stately/list';
 import { useListBox, useListBoxSection, useOption } from '@react-aria/listbox';
 import { Item, Section } from '@react-stately/collections';
-import { useSeparator } from '@react-aria/separator';
 import { useFocusRing } from '@react-aria/focus';
 import { mergeProps } from '@react-aria/utils';
-import ConfirmCategoryDelete from '../modals/ConfirmCategoryDelete';
 
 const zIndices = { SECTION_HEADING: 10 };
 
@@ -922,6 +920,7 @@ export class TransactionList extends React.Component {
           {...scrollProps}
           aria-label="transaction list"
           label=""
+          loadMore={onLoadMore}
           selectionMode="none"
           style={{ flex: '1 auto', height: '100%', overflowY: 'auto' }}
         >
@@ -964,15 +963,36 @@ export class TransactionList extends React.Component {
 
 function ListBox(props) {
   let state = useListState(props);
-  let ref = React.useRef();
-  let { listBoxProps, labelProps } = useListBox(props, state, ref);
+  let listBoxRef = React.useRef();
+  let { listBoxProps, labelProps } = useListBox(props, state, listBoxRef);
+
+  useEffect(() => {
+    function loadMoreTransactions() {
+      if (
+        Math.abs(
+          listBoxRef.current.scrollHeight -
+            listBoxRef.current.clientHeight -
+            listBoxRef.current.scrollTop
+        ) < listBoxRef.current.clientHeight // load more when we're one screen height from the end
+      ) {
+        props.loadMore();
+      }
+    }
+
+    listBoxRef.current.addEventListener('scroll', loadMoreTransactions);
+
+    return () => {
+      listBoxRef.current &&
+        listBoxRef.current.removeEventListener('scroll', loadMoreTransactions);
+    };
+  }, [state.collection]);
 
   return (
     <>
       <div {...labelProps}>{props.label}</div>
       <ul
         {...listBoxProps}
-        ref={ref}
+        ref={listBoxRef}
         style={{
           padding: 0,
           listStyle: 'none',

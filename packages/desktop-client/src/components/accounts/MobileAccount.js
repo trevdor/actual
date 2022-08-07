@@ -261,7 +261,9 @@ function Account(props) {
                   //     onRefresh={onRefresh}
                   //   />
                   // }
-                  onLoadMore={() => paged && paged.fetchNext()}
+                  onLoadMore={() => {
+                    paged && paged.fetchNext();
+                  }}
                   onSearch={onSearch}
                   onSelectTransaction={() => {}} // onSelectTransaction}
                 />
