@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect } from 'react';
 
 export function useScrollFlasher() {
   let scrollRef = useRef(null);

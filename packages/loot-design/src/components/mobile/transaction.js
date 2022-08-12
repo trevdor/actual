@@ -1,5 +1,11 @@
 import React from 'react';
-import { View, Text, SectionList, ScrollView, Animated } from 'react-native';
+import {
+  View,
+  Text,
+  SectionList,
+  ScrollView,
+  Animated
+} from 'react-native';
 import memoizeOne from 'memoize-one';
 import {
   format as formatDate,
@@ -7,7 +13,7 @@ import {
   parseISO,
   isValid as isValidDate
 } from 'date-fns';
-// import { Swipeable, RectButton } from 'react-native-gesture-handler';
+import { Swipeable, RectButton } from 'react-native-gesture-handler';
 import * as monthUtils from 'loot-core/src/shared/months';
 import {
   splitTransaction,
@@ -31,7 +37,7 @@ import Add from '../../svg/v1/Add';
 import Trash from '../../svg/v1/Trash';
 import PencilWriteAlternate from '../../svg/v2/PencilWriteAlternate';
 import { FocusableAmountInput } from './AmountInput';
-import ExitTransition from 'ExitTransition';
+import ExitTransition from './ExitTransition';
 import {
   FieldLabel,
   InputField,
@@ -769,8 +775,8 @@ export class Transaction extends React.PureComponent {
     let prettyCategory = transferAcct
       ? 'Transfer'
       : is_parent
-      ? 'Split'
-      : categoryName;
+        ? 'Split'
+        : categoryName;
 
     let isPreview = isPreviewId(id);
     let textStyle = isPreview && {
@@ -784,8 +790,8 @@ export class Transaction extends React.PureComponent {
           notes === 'missed'
             ? colors.r6
             : notes === 'due'
-            ? colors.y4
-            : colors.n5
+              ? colors.y4
+              : colors.n5
       }
     ];
 
