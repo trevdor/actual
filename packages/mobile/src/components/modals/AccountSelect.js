@@ -9,7 +9,7 @@ export default function AccountSelect({ route, navigation }) {
       dataName="accounts"
       onSelect={id => {
         onSelect(id);
-        // navigation.goBack();
+        navigation.goBack();
       }}
     />
   );

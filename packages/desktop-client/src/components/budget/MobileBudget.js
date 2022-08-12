@@ -1,21 +1,15 @@
 import React, { useContext } from 'react';
-import { Button, View, Text } from 'loot-design/src/components/common';
+import { View } from 'loot-design/src/components/common';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { send, listen } from 'loot-core/src/platform/client/fetch';
 import * as actions from 'loot-core/src/client/actions';
 import * as monthUtils from 'loot-core/src/shared/months';
-import NamespaceContext from 'loot-design/src/components/spreadsheet/NamespaceContext';
 import SpreadsheetContext from 'loot-design/src/components/spreadsheet/SpreadsheetContext';
-import { colors, mobileStyles as styles } from 'loot-design/src/style';
-import SheetValue from 'loot-design/src/components/spreadsheet/SheetValue';
-import CellValue from 'loot-design/src/components/spreadsheet/CellValue';
-import format from 'loot-design/src/components/spreadsheet/format';
+import { colors } from 'loot-design/src/style';
 import { BudgetTable } from './MobileBudgetTable';
 import AnimatedLoading from 'loot-design/src/svg/AnimatedLoading';
 import SyncRefresh from '../SyncRefresh';
-import Modal from '../modals/MobileModal';
-import { rolloverBudget } from 'loot-core/src/client/queries';
 
 import {
   addCategory,
@@ -23,111 +17,6 @@ import {
   moveCategoryGroup
 } from 'loot-core/src/shared/categories.js';
 import { withThemeColor } from 'loot-design/src/util/withThemeColor';
-
-function BudgetSummary({ month, onClose }) {
-  const prevMonthName = monthUtils.format(monthUtils.prevMonth(month), 'MMM');
-
-  return (
-    <NamespaceContext.Provider value={monthUtils.sheetForMonth(month)}>
-      <View
-        style={{ position: 'absolute', top: 0, bottom: 0, left: 0, right: 0 }}
-      >
-        <Modal title="Budget Details" animate>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'center',
-              paddingTop: 15,
-              paddingBottom: 15
-            }}
-          >
-            <View
-              style={[
-                styles.text,
-                {
-                  fontWeight: '600',
-                  textAlign: 'right',
-                  marginRight: 10
-                }
-              ]}
-            >
-              <CellValue
-                binding={rolloverBudget.incomeAvailable}
-                type="financial"
-              />
-              <CellValue
-                binding={rolloverBudget.lastMonthOverspent}
-                type="financial"
-              />
-              <CellValue
-                binding={rolloverBudget.totalBudgeted}
-                type="financial"
-              />
-              <CellValue
-                binding={rolloverBudget.forNextMonth}
-                type="financial"
-              />
-            </View>
-
-            <View
-              style={[
-                styles.text,
-                {
-                  display: 'flex',
-                  flexDirection: 'column',
-                  textAlign: 'left'
-                }
-              ]}
-            >
-              <Text>Available Funds</Text>
-              <Text>Overspent in {prevMonthName}</Text>
-              <Text>Budgeted</Text>
-              <Text>For Next Month</Text>
-            </View>
-          </View>
-
-          <View style={{ alignItems: 'center', marginBottom: 15 }}>
-            <SheetValue binding={rolloverBudget.toBudget}>
-              {({ value: amount }) => {
-                return (
-                  <>
-                    <Text style={styles.text}>
-                      {amount < 0 ? 'Overbudget:' : 'To budget:'}
-                    </Text>
-                    <Text
-                      style={[
-                        styles.text,
-                        {
-                          fontWeight: '600',
-                          fontSize: 22,
-                          color: amount < 0 ? colors.r4 : colors.n1
-                        }
-                      ]}
-                    >
-                      {format(amount, 'financial')}
-                    </Text>
-                  </>
-                );
-              }}
-            </SheetValue>
-          </View>
-
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'center',
-              paddingBottom: 15
-            }}
-          >
-            <Button style={{ marginRight: 10 }} onClick={onClose}>
-              Close
-            </Button>
-          </View>
-        </Modal>
-      </View>
-    </NamespaceContext.Provider>
-  );
-}
 
 class Budget extends React.Component {
   constructor(props) {
@@ -141,8 +30,7 @@ class Budget extends React.Component {
       currentMonth: currentMonth,
       initialized: false,
       editMode: false,
-      categoryGroups: null,
-      showBudgetDetails: false
+      categoryGroups: null
     };
   }
 
@@ -203,7 +91,7 @@ class Budget extends React.Component {
   };
 
   onShowBudgetDetails = () => {
-    this.setState({ showBudgetDetails: true });
+    this.props.pushModal('budget-summary', { month: this.state.currentMonth });
   };
 
   onBudgetAction = type => {
@@ -404,13 +292,6 @@ class Budget extends React.Component {
             />
           )}
         </SyncRefresh>
-
-        {showBudgetDetails && (
-          <BudgetSummary
-            month={currentMonth}
-            onClose={() => this.setState({ showBudgetDetails: false })}
-          />
-        )}
       </>
     );
   }
@@ -429,5 +310,5 @@ export default connect(
     prefs: state.prefs.local,
     initialBudgetMonth: state.app.budgetMonth
   }),
-  dispatch => bindActionCreators(actions, dispatch)
+  actions
 )(withThemeColor(colors.p5)(BudgetWrapper));
