@@ -6,10 +6,10 @@ import { createLocation } from 'history';
 import Component from '@reactions/component';
 import * as actions from 'loot-core/src/client/actions';
 import { send, listen, unlisten } from 'loot-core/src/platform/client/fetch';
-import { getModalRoute } from '../util';
 
 import CreateAccount from './modals/CreateAccount';
 import CreateLocalAccount from 'loot-design/src/components/modals/CreateLocalAccount';
+import BudgetSummary from 'loot-design/src/components/modals/BudgetSummary';
 import CloseAccount from 'loot-design/src/components/modals/CloseAccount';
 import SelectLinkedAccounts from 'loot-design/src/components/modals/SelectLinkedAccounts';
 import ConfigureLinkedAccounts from 'loot-design/src/components/modals/ConfigureLinkedAccounts';
@@ -268,6 +268,15 @@ function Modals({
 
         <Route path="/welcome-screen">
           <WelcomeScreen modalProps={modalProps} actions={actions} />
+        </Route>
+
+        <Route path="/budget-summary">
+          <BudgetSummary
+            key={name}
+            modalProps={modalProps}
+            month={options.month}
+            actions={actions}
+          />
         </Route>
       </Switch>
     );

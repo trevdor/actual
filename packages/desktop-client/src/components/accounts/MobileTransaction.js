@@ -179,158 +179,158 @@ export class TransactionEdit extends React.Component {
     this.setState({ editingChild: null });
   };
 
-  onEdit = async (transaction, name, value) => {
-    let { transactions } = this.state;
-    let { payees } = this.props;
+  // onEdit = async (transaction, name, value) => {
+  //   let { transactions } = this.state;
+  //   let { payees } = this.props;
 
-    let newTransaction = { ...transaction, [name]: value };
-    if (this.props.onEdit) {
-      newTransaction = await this.props.onEdit(newTransaction);
-    }
+  //   let newTransaction = { ...transaction, [name]: value };
+  //   if (this.props.onEdit) {
+  //     newTransaction = await this.props.onEdit(newTransaction);
+  //   }
 
-    let { data: newTransactions } = updateTransaction(
-      transactions,
-      deserializeTransaction(newTransaction, null, this.props.dateFormat)
-    );
+  //   let { data: newTransactions } = updateTransaction(
+  //     transactions,
+  //     deserializeTransaction(newTransaction, null, this.props.dateFormat)
+  //   );
 
-    this._queuedChange = null;
-    this.setState({ transactions: newTransactions });
-    return newTransactions;
-  };
+  //   this._queuedChange = null;
+  //   this.setState({ transactions: newTransactions });
+  //   return newTransactions;
+  // };
 
-  onQueueChange = (transaction, name, value) => {
-    // This is an ugly hack to solve the problem that input's blur
-    // events are not fired when unmounting. If the user has focused
-    // an input and swipes back, it should still save, but because the
-    // blur event is not fired we need to manually track the latest
-    // change and apply it ourselves when unmounting
-    this._queuedChange = [transaction, name, value];
-  };
+  // onQueueChange = (transaction, name, value) => {
+  //   // This is an ugly hack to solve the problem that input's blur
+  //   // events are not fired when unmounting. If the user has focused
+  //   // an input and swipes back, it should still save, but because the
+  //   // blur event is not fired we need to manually track the latest
+  //   // change and apply it ourselves when unmounting
+  //   this._queuedChange = [transaction, name, value];
+  // };
 
-  onTap = (transactionId, name) => {
-    let { navigation, dateFormat } = this.props;
+  // onTap = (transactionId, name) => {
+  //   let { navigation, dateFormat } = this.props;
 
-    if (navigation) {
-      switch (name) {
-        case 'category':
-          navigation.navigate('CategorySelect', {
-            onSelect: id => {
-              let { transactions } = this.state;
-              let transaction = transactions.find(t => t.id === transactionId);
-              // This is a deficiency of this API, need to fix. It
-              // assumes that it receives a serialized transaction,
-              // but we only have access to the raw transaction
-              this.onEdit(
-                serializeTransaction(transaction, dateFormat),
-                name,
-                id
-              );
-            }
-          });
-          break;
-        case 'account':
-          navigation.navigate('AccountSelect', {
-            title: 'Select an account',
-            onSelect: id => {
-              let { transactions } = this.state;
-              let transaction = transactions.find(t => t.id === transactionId);
-              // See above
-              this.onEdit(
-                serializeTransaction(transaction, dateFormat),
-                name,
-                id
-              );
-            }
-          });
-          break;
-        case 'payee':
-          navigation.navigate('PayeeSelect', {
-            onSelect: id => {
-              let { transactions } = this.state;
-              let transaction = transactions.find(t => t.id === transactionId);
-              // See above
-              this.onEdit(
-                serializeTransaction(transaction, dateFormat),
-                name,
-                id
-              );
-            }
-          });
-          break;
-        default:
-      }
-    }
-  };
+  //   if (navigation) {
+  //     switch (name) {
+  //       case 'category':
+  //         navigation.navigate('CategorySelect', {
+  //           onSelect: id => {
+  //             let { transactions } = this.state;
+  //             let transaction = transactions.find(t => t.id === transactionId);
+  //             // This is a deficiency of this API, need to fix. It
+  //             // assumes that it receives a serialized transaction,
+  //             // but we only have access to the raw transaction
+  //             this.onEdit(
+  //               serializeTransaction(transaction, dateFormat),
+  //               name,
+  //               id
+  //             );
+  //           }
+  //         });
+  //         break;
+  //       case 'account':
+  //         navigation.navigate('AccountSelect', {
+  //           title: 'Select an account',
+  //           onSelect: id => {
+  //             let { transactions } = this.state;
+  //             let transaction = transactions.find(t => t.id === transactionId);
+  //             // See above
+  //             this.onEdit(
+  //               serializeTransaction(transaction, dateFormat),
+  //               name,
+  //               id
+  //             );
+  //           }
+  //         });
+  //         break;
+  //       case 'payee':
+  //         navigation.navigate('PayeeSelect', {
+  //           onSelect: id => {
+  //             let { transactions } = this.state;
+  //             let transaction = transactions.find(t => t.id === transactionId);
+  //             // See above
+  //             this.onEdit(
+  //               serializeTransaction(transaction, dateFormat),
+  //               name,
+  //               id
+  //             );
+  //           }
+  //         });
+  //         break;
+  //       default:
+  //     }
+  //   }
+  // };
 
-  onSplit = () => {
-    this.props.navigation.navigate('CategorySelect', {
-      title: 'Select the first category',
-      onSelect: categoryId => {
-        let transactions = this.state.transactions;
+  // onSplit = () => {
+  //   this.props.navigation.navigate('CategorySelect', {
+  //     title: 'Select the first category',
+  //     onSelect: categoryId => {
+  //       let transactions = this.state.transactions;
 
-        // Split the transaction
-        let { data } = splitTransaction(transactions, transactions[0].id);
-        data[1].category = categoryId;
+  //       // Split the transaction
+  //       let { data } = splitTransaction(transactions, transactions[0].id);
+  //       data[1].category = categoryId;
 
-        this.setState({ transactions: data }, this.focusSplit);
-      }
-    });
-  };
+  //       this.setState({ transactions: data }, this.focusSplit);
+  //     }
+  //   });
+  // };
 
-  onAddSplit = () => {
-    this.props.navigation.navigate('CategorySelect', {
-      title: 'Select a category',
-      onSelect: categoryId => {
-        let transactions = this.state.transactions;
+  // onAddSplit = () => {
+  //   this.props.navigation.navigate('CategorySelect', {
+  //     title: 'Select a category',
+  //     onSelect: categoryId => {
+  //       let transactions = this.state.transactions;
 
-        // Split the transaction
-        let { data } = addSplitTransaction(transactions, transactions[0].id);
-        // Set the initial category
-        data[data.length - 1].category = categoryId;
+  //       // Split the transaction
+  //       let { data } = addSplitTransaction(transactions, transactions[0].id);
+  //       // Set the initial category
+  //       data[data.length - 1].category = categoryId;
 
-        this.setState({ transactions: data }, this.focusSplit);
-      }
-    });
-  };
+  //       this.setState({ transactions: data }, this.focusSplit);
+  //     }
+  //   });
+  // };
 
-  focusSplit = () => {
-    if (this.lastChildAmount) {
-      this.lastChildAmount.focus();
-    }
-  };
+  // focusSplit = () => {
+  //   if (this.lastChildAmount) {
+  //     this.lastChildAmount.focus();
+  //   }
+  // };
 
-  onDeleteSplit = transaction => {
-    let { transactions } = this.state;
-    let { data } = deleteTransaction(transactions, transaction.id);
-    this.setState({ transactions: data });
-  };
+  // onDeleteSplit = transaction => {
+  //   let { transactions } = this.state;
+  //   let { data } = deleteTransaction(transactions, transaction.id);
+  //   this.setState({ transactions: data });
+  // };
 
-  renderActions = (progress, dragX) => {
-    const trans = dragX.interpolate({
-      inputRange: [-101, -100, -50, 0],
-      outputRange: [-6, -5, -5, 20]
-    });
-    return (
-      <Button
-        onClick={this.close}
-        style={{
-          flex: '1 auto',
-          justifyContent: 'center',
-          backgroundColor: colors.r4
-        }}
-      >
-        <Text // TODO: animate
-          style={{
-            color: 'white',
-            textAlign: 'right',
-            transform: [{ translateX: trans }]
-          }}
-        >
-          Delete
-        </Text>
-      </Button>
-    );
-  };
+  // renderActions = (progress, dragX) => {
+  //   const trans = dragX.interpolate({
+  //     inputRange: [-101, -100, -50, 0],
+  //     outputRange: [-6, -5, -5, 20]
+  //   });
+  //   return (
+  //     <Button
+  //       onClick={this.close}
+  //       style={{
+  //         flex: '1 auto',
+  //         justifyContent: 'center',
+  //         backgroundColor: colors.r4
+  //       }}
+  //     >
+  //       <Text // TODO: animate
+  //         style={{
+  //           color: 'white',
+  //           textAlign: 'right',
+  //           transform: [{ translateX: trans }]
+  //         }}
+  //       >
+  //         Delete
+  //       </Text>
+  //     </Button>
+  //   );
+  // };
 
   render() {
     const {
