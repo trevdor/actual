@@ -10,10 +10,6 @@ let buttonStyle = { border: 0, fontSize: 15, padding: '10px 13px' };
 
 export default function MobileWebMessage() {
   const hideMobileMessagePref = useSelector(state => {
-    console.log(
-      '>>> ',
-      (state.prefs.local && state.prefs.local.hideMobileMessage) || true
-    );
     return (state.prefs.local && state.prefs.local.hideMobileMessage) || true;
   });
 
