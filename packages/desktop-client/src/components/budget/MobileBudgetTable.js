@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect, useContext } from 'react';
+import React, { useMemo, useEffect, useContext, useState } from 'react';
 
 // import {
 //   RectButton,
@@ -20,7 +20,9 @@ import {
   Card,
   KeyboardButton,
   Label,
+  Menu,
   Text,
+  Tooltip,
   View
 } from 'loot-design/src/components/common';
 import { colors, mobileStyles as styles } from 'loot-design/src/style';
@@ -41,6 +43,10 @@ import ArrowThinUp from 'loot-design/src/svg/v1/ArrowThinUp';
 import ArrowThinDown from 'loot-design/src/svg/v1/ArrowThinDown';
 import DotsHorizontalTriple from 'loot-design/src/svg/v1/DotsHorizontalTriple';
 import Add from 'loot-design/src/svg/v1/Add';
+import { SyncButton } from '../Titlebar';
+import { connect } from 'react-redux';
+import * as actions from 'loot-core/src/client/actions';
+import { withThemeColor } from 'loot-design/src/util/withThemeColor';
 
 export function ToBudget({ toBudget, onClick }) {
   return (
@@ -1035,15 +1041,29 @@ export class BudgetTable extends React.Component {
   }
 }
 
-export function BudgetHeader({
+function UnconnectedBudgetHeader({
   currentMonth,
   monthBounds,
   editMode,
   onDone,
-  onOpenActionSheet,
   onPrevMonth,
-  onNextMonth
+  onNextMonth,
+  sync,
+  localPrefs
 }) {
+  // let [menuOpen, setMenuOpen] = useState(false);
+
+  // let onMenuSelect = type => {
+  //   setMenuOpen(false);
+
+  //   switch (type) {
+  //     case 'sync':
+  //       sync();
+  //       break;
+  //     default:
+  //   }
+  // };
+
   let prevEnabled = currentMonth > monthBounds.start;
   let nextEnabled = currentMonth < monthUtils.subMonths(monthBounds.end, 1);
 
@@ -1127,9 +1147,23 @@ export function BudgetHeader({
             />
           </Button>
 
+          <SyncButton
+            style={{
+              color: 'white',
+              position: 'absolute',
+              top: 0,
+              bottom: 0,
+              right: 0,
+              backgroundColor: 'transparent',
+              paddingLeft: 12,
+              paddingRight: 12
+            }}
+            localPrefs={localPrefs}
+            onSync={sync}
+          />
           {/* <Button
             bare
-            onClick={onOpenActionSheet}
+            onClick={() => setMenuOpen(true)}
             style={{
               position: 'absolute',
               top: 0,
@@ -1139,21 +1173,38 @@ export function BudgetHeader({
               paddingLeft: 12,
               paddingRight: 12
             }}
-            // hitSlop={{
-            //   top: 5,
-            //   bottom: 5,
-            //   left: 20,
-            //   right: 20
-            // }}
           >
-            <DotsHorizontalTriple
+            {menuOpen && (
+              <Tooltip
+                position="bottom-right"
+                style={{ padding: 0 }}
+                onClose={() => setMenuOpen(false)}
+              >
+                <Menu
+                  onMenuSelect={onMenuSelect}
+                  items={[
+                    { name: 'change-password', text: 'Change password' },
+                    { name: 'sign-out', text: 'Sign out' }
+                  ].filter(x => x)}
+                />
+              </Tooltip>
+            )} */}
+
+          {/* <DotsHorizontalTriple
               width="20"
               height="20"
               style={{ color: 'white' }}
-            />
-          </Button> */}
+            /> */}
+          {/* </Button> */}
         </>
       )}
     </View>
   );
 }
+
+const BudgetHeader = connect(
+  state => ({
+    localPrefs: state.prefs.local
+  }),
+  actions
+)(UnconnectedBudgetHeader);
