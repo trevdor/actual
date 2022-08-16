@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { css } from 'glamor';
 import {
@@ -375,6 +375,9 @@ function ToggleButton({ style, onFloat }) {
 const MenuButton = withRouter(function MenuButton({ history }) {
   let dispatch = useDispatch();
   let [menuOpen, setMenuOpen] = useState(false);
+  let budgetId = useSelector(
+    state => state.prefs.local && state.prefs.local.id
+  );
 
   function onMenuSelect(type) {
     setMenuOpen(false);
@@ -392,6 +395,9 @@ const MenuButton = withRouter(function MenuButton({ history }) {
       case 'repair-splits':
         history.push('/tools/fix-splits', { locationPtr: history.location });
         break;
+      case 'load-backup':
+        dispatch(pushModal('load-backup', { budgetId }));
+        break;
       case 'settings':
         history.push('/settings');
         break;
@@ -407,6 +413,7 @@ const MenuButton = withRouter(function MenuButton({ history }) {
     { name: 'open-rules', text: 'Manage Rules' },
     { name: 'find-schedules', text: 'Find schedules' },
     { name: 'repair-splits', text: 'Repair split transactions' },
+    { name: 'load-backup', text: 'Load backup' },
     Menu.line,
     { name: 'settings', text: 'Settings' },
     { name: 'close', text: 'Close File' }
