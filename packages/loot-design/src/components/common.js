@@ -16,13 +16,12 @@ import {
   ListboxList,
   ListboxOption
 } from '@reach/listbox';
-import { css } from 'glamor';
+import { css, media } from 'glamor';
 import hotkeys from 'hotkeys-js';
 
 import { integerToCurrency } from 'loot-core/src/shared/util';
 import ExpandArrow from 'loot-design/src/svg/ExpandArrow';
 
-import { isMobile } from '../../../desktop-client/src/util';
 import { styles, colors } from '../style';
 import Delete from '../svg/Delete';
 import Loading from '../svg/v1/AnimatedLoading';
@@ -865,10 +864,10 @@ export function Modal({
         noAnimation={noAnimation}
         isCurrent={isCurrent}
         size={size}
-        style={[
+        {...css(
           {
             willChange: 'opacity, transform',
-            minWidth: isMobile() ? '100%' : 500,
+            minWidth: '100%',
             minHeight: 0,
             boxShadow: styles.shadowLarge,
             borderRadius: 4,
@@ -876,8 +875,11 @@ export function Modal({
             opacity: isHidden ? 0 : 1
           },
           style,
-          styles.lightScrollbar
-        ]}
+          styles.lightScrollbar,
+          media(`(min-width: ${styles.breakpointNarrow})`, {
+            minWidth: 500
+          })
+        )}
       >
         {showHeader && (
           <View

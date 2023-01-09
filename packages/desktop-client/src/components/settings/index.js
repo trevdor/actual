@@ -1,17 +1,17 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
+
+import { css, media } from 'glamor';
 
 import * as actions from 'loot-core/src/client/actions';
 import Platform from 'loot-core/src/client/platform';
 import { listen } from 'loot-core/src/platform/client/fetch';
 import { View, Text, Button, Input } from 'loot-design/src/components/common';
 import { FormField, FormLabel } from 'loot-design/src/components/forms';
-import { colors } from 'loot-design/src/style';
-import { mobileStyles } from 'loot-design/src/style';
+import { colors, styles } from 'loot-design/src/style';
 import { withThemeColor } from 'loot-design/src/util/withThemeColor';
 
 import useServerVersion from '../../hooks/useServerVersion';
-import { isMobile } from '../../util';
 import { Page } from '../Page';
 import EncryptionSettings from './Encryption';
 import ExportBudget from './Export';
@@ -64,19 +64,24 @@ function Settings({
     <Page title="Settings">
       <View style={{ flexShrink: 0, gap: 30, maxWidth: 600 }}>
         {/* The only spot to close a budget on mobile */}
-        {isMobile() && (
-          <Section title="Budget">
-            <FormField>
-              <FormLabel title="Name" />
-              <Input
-                value={prefs.budgetName}
-                disabled
-                style={{ color: '#999' }}
-              />
-            </FormField>
-            <Button onClick={closeBudget}>Close Budget</Button>
-          </Section>
-        )}
+        <Section
+          title="Budget"
+          style={css(
+            media(`(min-width: ${styles.breakpointNarrow})`, {
+              display: 'none'
+            })
+          )}
+        >
+          <FormField>
+            <FormLabel title="Name" />
+            <Input
+              value={prefs.budgetName}
+              disabled
+              style={{ color: '#999' }}
+            />
+          </FormField>
+          <Button onClick={closeBudget}>Close Budget</Button>
+        </Section>
 
         <About />
 

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 
-import { View, Link } from 'loot-design/src/components/common';
-import { colors } from 'loot-design/src/style';
+import { css, media } from 'glamor';
 
-import { isMobile } from '../../util';
+import { View, Link } from 'loot-design/src/components/common';
+import { colors, styles } from 'loot-design/src/style';
 
 export function Section({ title, children, style, titleProps, ...props }) {
   return (
@@ -25,15 +25,20 @@ export function Section({ title, children, style, titleProps, ...props }) {
 export function ButtonSetting({ button, children }) {
   return (
     <View
-      style={{
-        backgroundColor: colors.n9,
-        alignSelf: 'flex-start',
-        alignItems: 'flex-start',
-        padding: 15,
-        borderRadius: 4,
-        border: '1px solid ' + colors.n8,
-        ...(isMobile() && { width: '100%' })
-      }}
+      {...css(
+        {
+          backgroundColor: colors.n9,
+          alignSelf: 'flex-start',
+          alignItems: 'flex-start',
+          padding: 15,
+          borderRadius: 4,
+          border: '1px solid ' + colors.n8,
+          width: '100%'
+        },
+        media(`(min-width: ${styles.breakpointNarrow})`, {
+          width: 'auto'
+        })
+      )}
     >
       <View
         style={{ marginBottom: 10, maxWidth: 500, lineHeight: 1.5, gap: 10 }}
@@ -50,7 +55,15 @@ export function AdvancedToggle({ children }) {
   return expanded ? (
     <Section
       title="Advanced Settings"
-      style={{ marginBottom: 25, ...(isMobile() && { width: '100%' }) }}
+      {...css(
+        {
+          marginBottom: 25,
+          width: '100%'
+        },
+        media(`(min-width: ${styles.breakpointNarrow})`, {
+          width: 'auto'
+        })
+      )}
     >
       {children}
     </Section>
