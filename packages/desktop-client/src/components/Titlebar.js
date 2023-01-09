@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef, useContext } from 'react';
 import { connect } from 'react-redux';
 import { Switch, Route, withRouter } from 'react-router-dom';
 
+import { css, media } from 'glamor';
+
 import * as actions from 'loot-core/src/client/actions';
 import Platform from 'loot-core/src/client/platform';
 import * as queries from 'loot-core/src/client/queries';
@@ -16,7 +18,7 @@ import {
   P
 } from 'loot-design/src/components/common';
 import SheetValue from 'loot-design/src/components/spreadsheet/SheetValue';
-import { colors } from 'loot-design/src/style';
+import { colors, styles } from 'loot-design/src/style';
 import ArrowLeft from 'loot-design/src/svg/v1/ArrowLeft';
 import AlertTriangle from 'loot-design/src/svg/v2/AlertTriangle';
 import ArrowButtonRight1 from 'loot-design/src/svg/v2/ArrowButtonRight1';
@@ -113,7 +115,7 @@ export function SyncButton({ localPrefs, style, onSync }) {
   return (
     <Button
       bare
-      style={[
+      style={css(
         style,
         {
           WebkitAppRegion: 'none',
@@ -125,8 +127,18 @@ export function SyncButton({ localPrefs, style, onSync }) {
                 syncState === 'local'
               ? colors.n6
               : null
-        }
-      ]}
+        },
+        media(`(min-width: ${styles.breakpointNarrow})`, {
+          color:
+            syncState === 'error'
+              ? colors.r7
+              : syncState === 'disabled' ||
+                syncState === 'offline' ||
+                syncState === 'local'
+              ? colors.n9
+              : null
+        })
+      )}
       onClick={onSync}
     >
       {syncState === 'error' ? (
