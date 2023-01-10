@@ -190,7 +190,7 @@ export const styles = {
     headerBackTitle: null
   },
   text: {
-    color: 'fuchsia', //colors.n1,
+    color: colors.n1,
     fontSize: 16
     // lineHeight: 22.4 // TODO: This seems like trouble, but what's the right value?
   }
