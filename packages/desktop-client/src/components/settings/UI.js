@@ -36,7 +36,7 @@ export function ButtonSetting({ button, children }) {
           border: '1px solid ' + colors.n8,
           width: '100%'
         },
-        media(`(min-width: ${tokens.breakpoint_narrow})`, {
+        media(`(min-width: ${tokens.breakpoint_medium})`, {
           width: 'auto'
         })
       )}
@@ -61,7 +61,7 @@ export function AdvancedToggle({ children }) {
           marginBottom: 25,
           width: '100%'
         },
-        media(`(min-width: ${tokens.breakpoint_narrow})`, {
+        media(`(min-width: ${tokens.breakpoint_medium})`, {
           width: 'auto'
         })
       )}

@@ -8,5 +8,5 @@ export function getModalRoute(name) {
 export function isMobile(width) {
   // Simple detection: if the screen width is too small
   const containerWidth = width || window.innerWidth;
-  return containerWidth < parseInt(tokens.breakpoint_narrow);
+  return containerWidth < parseInt(tokens.breakpoint_medium);
 }

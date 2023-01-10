@@ -98,39 +98,31 @@ export const styles = {
     fontWeight: 700,
     letterSpacing: 0.5
   },
-  mediumText: css(
-    {
-      fontSize: 15,
-      fontWeight: 500
-    },
-    media(`(min-width: ${tokens.breakpoint_narrow})`, {
-      fontSize: 15,
-      fontWeight: 500
-    })
-  ),
-  smallText: css(
-    { fontSize: 13 },
-    media(`(min-width: ${tokens.breakpoint_narrow})`, {
+  mediumText: {
+    fontSize: 15,
+    fontWeight: 500
+  },
+  smallText: {
+    fontSize: 15,
+    [`@media (min-width: ${tokens.breakpoint_medium})`]: {
       color: colors.n1,
       fontSize: 13
       // lineHeight: 21 // TODO: This seems like trouble, but what's the right value?
-    })
-  ),
+    }
+  },
   verySmallText: {
     fontSize: 13
   },
-  page: css(
-    {
-      // This is the height of the titlebar
-      paddingTop: 8,
-      minWidth: 360,
-      flex: 1
-    },
-    media(`(min-width: ${tokens.breakpoint_narrow})`, {
+  page: {
+    // This is the height of the titlebar
+    paddingTop: 8,
+    minWidth: 360,
+    flex: 1,
+    [`@media (min-width: ${tokens.breakpoint_medium})`]: {
       minWidth: 500,
       paddingTop: 36
-    })
-  ),
+    }
+  },
   pageHeader: {
     fontSize: 25,
     borderBottomWidth: 5,
@@ -143,46 +135,43 @@ export const styles = {
     marginBottom: 20,
     paddingBottom: 5
   },
-  pageContent: css(
-    {
-      paddingLeft: 2,
-      paddingRight: 2
-    },
-    media(`(min-width: ${tokens.breakpoint_narrow})`, {
+  pageContent: {
+    paddingLeft: 2,
+    paddingRight: 2,
+    [`@media (min-width: ${tokens.breakpoint_medium})`]: {
       paddingLeft: 20,
       paddingRight: 20
-    })
-  ),
-  settingsPageContent: css(
-    {
-      padding: 20
-    },
-    media(`(min-width: ${tokens.breakpoint_narrow})`, {
+    }
+  },
+  settingsPageContent: {
+    padding: 20,
+    [`@media (min-width: ${tokens.breakpoint_medium})`]: {
       padding: 'inherit'
-    })
-  ),
+    }
+  },
   staticText: {
     cursor: 'default',
     userSelect: 'none'
   },
-  shadow: css(
-    { boxShadow: '0 2px 4px 0 rgba(0,0,0,0.1)' },
-    media(`(min-width: ${tokens.breakpoint_narrow})`, {
-      boxShadow: '0 1px 1px 2px #9594A8'
-    })
-  ),
-  shadowLarge: css(
+  shadow: {
+    boxShadow: '0 1px 1px 2px #9594A8',
+    [`@media (min-width: ${tokens.breakpoint_medium})`]: {
+      boxShadow: '0 2px 4px 0 rgba(0,0,0,0.1)'
+    }
+  },
+  shadowLarge: [
     {
-      boxShadow: '0 15px 30px 0 rgba(0,0,0,0.11), 0 5px 15px 0 rgba(0,0,0,0.08)'
-    },
-    media(`(min-width: ${tokens.breakpoint_narrow})`, {
       shadowColor: '#9594A8',
       shadowOffset: { width: 0, height: 10 },
       shadowRadius: 10,
       shadowOpacity: 1,
-      elevation: 3
-    })
-  ),
+      elevation: 3,
+      [`@media (min-width: ${tokens.breakpoint_medium})`]: {
+        boxShadow:
+          '0 15px 30px 0 rgba(0,0,0,0.11), 0 5px 15px 0 rgba(0,0,0,0.08)'
+      }
+    }
+  ],
   tnum: {
     fontFeatureSettings: '"tnum"'
   },
@@ -203,7 +192,7 @@ export const styles = {
     headerBackTitle: null
   },
   text: {
-    color: colors.n1,
+    color: 'fuchsia', //colors.n1,
     fontSize: 16
     // lineHeight: 22.4 // TODO: This seems like trouble, but what's the right value?
   }

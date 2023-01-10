@@ -334,7 +334,7 @@ export function Input({
   return (
     <input
       ref={inputRef ? mergeRefs([inputRef, ref]) : ref}
-      {...css([
+      {...css(
         defaultInputStyle,
         {
           ':focus': {
@@ -345,7 +345,7 @@ export function Input({
         },
         styles.smallText,
         style
-      ])}
+      )}
       {...nativeProps}
       onKeyDown={e => {
         if (e.keyCode === 13 && onEnter) {
@@ -865,22 +865,22 @@ export function Modal({
         noAnimation={noAnimation}
         isCurrent={isCurrent}
         size={size}
-        {...css(
+        style={[
           {
             willChange: 'opacity, transform',
             minWidth: '100%',
             minHeight: 0,
             borderRadius: 4,
             backgroundColor: 'white',
-            opacity: isHidden ? 0 : 1
+            opacity: isHidden ? 0 : 1,
+            [`@media (min-width: ${tokens.breakpoint_medium})`]: {
+              minWidth: 500
+            }
           },
           styles.shadowLarge,
           style,
-          styles.lightScrollbar,
-          media(`(min-width: ${tokens.breakpoint_narrow})`, {
-            minWidth: 500
-          })
-        )}
+          styles.lightScrollbar
+        ]}
       >
         {showHeader && (
           <View
