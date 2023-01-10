@@ -122,21 +122,21 @@ export function SyncButton({ localPrefs, style, onSync }) {
           WebkitAppRegion: 'none',
           color:
             syncState === 'error'
-              ? colors.r4
-              : syncState === 'disabled' ||
-                syncState === 'offline' ||
-                syncState === 'local'
-              ? colors.n6
-              : null
-        },
-        media(`(min-width: ${tokens.breakpoint_narrow})`, {
-          color:
-            syncState === 'error'
               ? colors.r7
               : syncState === 'disabled' ||
                 syncState === 'offline' ||
                 syncState === 'local'
               ? colors.n9
+              : null
+        },
+        media(`(min-width: ${tokens.breakpoint_narrow})`, {
+          color:
+            syncState === 'error'
+              ? colors.r4
+              : syncState === 'disabled' ||
+                syncState === 'offline' ||
+                syncState === 'local'
+              ? colors.n6
               : null
         })
       )}
