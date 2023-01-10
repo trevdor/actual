@@ -103,10 +103,8 @@ export const styles = {
     fontWeight: 500
   },
   smallText: {
-    fontSize: 15,
+    fontSize: 13,
     [`@media (min-width: ${tokens.breakpoint_medium})`]: {
-      color: colors.n1,
-      fontSize: 13
       // lineHeight: 21 // TODO: This seems like trouble, but what's the right value?
     }
   },
