@@ -207,7 +207,7 @@ export const Button = React.forwardRef(
     hoveredStyle = [
       bare
         ? { backgroundColor: 'rgba(100, 100, 100, .15)' }
-        : { boxShadow: styles.shadow },
+        : { ...styles.shadow },
       hoveredStyle
     ];
     activeStyle = [
@@ -870,11 +870,11 @@ export function Modal({
             willChange: 'opacity, transform',
             minWidth: '100%',
             minHeight: 0,
-            boxShadow: styles.shadowLarge,
             borderRadius: 4,
             backgroundColor: 'white',
             opacity: isHidden ? 0 : 1
           },
+          styles.shadowLarge,
           style,
           styles.lightScrollbar,
           media(`(min-width: ${tokens.breakpoint_narrow})`, {

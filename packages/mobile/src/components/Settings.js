@@ -16,7 +16,7 @@ import {
   TapField,
   EDITING_PADDING
 } from 'loot-design/src/components/mobile/forms';
-import { colors, mobileStyles as styles } from 'loot-design/src/style';
+import { colors, styles } from 'loot-design/src/style';
 import ExpandArrow from 'loot-design/src/svg/ExpandArrow';
 
 import AccountButton from './AccountButton';
