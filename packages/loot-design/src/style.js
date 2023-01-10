@@ -152,24 +152,11 @@ export const styles = {
     userSelect: 'none'
   },
   shadow: {
-    boxShadow: '0 1px 1px 2px #9594A8',
-    [`@media (min-width: ${tokens.breakpoint_medium})`]: {
-      boxShadow: '0 2px 4px 0 rgba(0,0,0,0.1)'
-    }
+    boxShadow: '0 2px 4px 0 rgba(0,0,0,0.1)'
   },
-  shadowLarge: [
-    {
-      shadowColor: '#9594A8',
-      shadowOffset: { width: 0, height: 10 },
-      shadowRadius: 10,
-      shadowOpacity: 1,
-      elevation: 3,
-      [`@media (min-width: ${tokens.breakpoint_medium})`]: {
-        boxShadow:
-          '0 15px 30px 0 rgba(0,0,0,0.11), 0 5px 15px 0 rgba(0,0,0,0.08)'
-      }
-    }
-  ],
+  shadowLarge: {
+    boxShadow: '0 15px 30px 0 rgba(0,0,0,0.11), 0 5px 15px 0 rgba(0,0,0,0.08)'
+  },
   tnum: {
     fontFeatureSettings: '"tnum"'
   },
@@ -190,10 +177,10 @@ export const styles = {
     headerBackTitle: null
   },
   text: {
-    color: colors.n1,
     fontSize: 16
     // lineHeight: 22.4 // TODO: This seems like trouble, but what's the right value?
-  }
+  },
+  textColor: colors.n1
 };
 
 let hiddenScrollbars = false;

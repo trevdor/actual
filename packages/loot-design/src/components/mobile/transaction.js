@@ -798,7 +798,7 @@ export class Transaction extends React.PureComponent {
               )}
               <TextOneLine
                 style={[
-                  styles.text,
+                  { fontSize: styles.text.fontSize, color: styles.textColor },
                   textStyle,
                   { fontSize: 14, fontWeight: added ? '600' : '400' },
                   prettyDescription === '' && {
