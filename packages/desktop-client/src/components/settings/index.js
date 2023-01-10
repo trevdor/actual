@@ -68,7 +68,7 @@ function Settings({
         <Section
           title="Budget"
           style={css(
-            media(`(min-width: ${tokens.breakpointNarrow})`, {
+            media(`(min-width: ${tokens.breakpoint_narrow})`, {
               display: 'none'
             })
           )}

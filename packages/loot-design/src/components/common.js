@@ -877,7 +877,7 @@ export function Modal({
           },
           style,
           styles.lightScrollbar,
-          media(`(min-width: ${tokens.breakpointNarrow})`, {
+          media(`(min-width: ${tokens.breakpoint_narrow})`, {
             minWidth: 500
           })
         )}
