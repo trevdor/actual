@@ -8,7 +8,8 @@ import Platform from 'loot-core/src/client/platform';
 import { listen } from 'loot-core/src/platform/client/fetch';
 import { View, Text, Button, Input } from 'loot-design/src/components/common';
 import { FormField, FormLabel } from 'loot-design/src/components/forms';
-import { colors, styles } from 'loot-design/src/style';
+import { colors } from 'loot-design/src/style';
+import tokens from 'loot-design/src/tokens';
 import { withThemeColor } from 'loot-design/src/util/withThemeColor';
 
 import useServerVersion from '../../hooks/useServerVersion';
@@ -67,7 +68,7 @@ function Settings({
         <Section
           title="Budget"
           style={css(
-            media(`(min-width: ${styles.breakpointNarrow})`, {
+            media(`(min-width: ${tokens.breakpointNarrow})`, {
               display: 'none'
             })
           )}

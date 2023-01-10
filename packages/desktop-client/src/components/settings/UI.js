@@ -3,7 +3,8 @@ import React, { useState } from 'react';
 import { css, media } from 'glamor';
 
 import { View, Link } from 'loot-design/src/components/common';
-import { colors, styles } from 'loot-design/src/style';
+import { colors } from 'loot-design/src/style';
+import tokens from 'loot-design/src/tokens';
 
 export function Section({ title, children, style, titleProps, ...props }) {
   return (
@@ -35,7 +36,7 @@ export function ButtonSetting({ button, children }) {
           border: '1px solid ' + colors.n8,
           width: '100%'
         },
-        media(`(min-width: ${styles.breakpointNarrow})`, {
+        media(`(min-width: ${tokens.breakpointNarrow})`, {
           width: 'auto'
         })
       )}
@@ -60,7 +61,7 @@ export function AdvancedToggle({ children }) {
           marginBottom: 25,
           width: '100%'
         },
-        media(`(min-width: ${styles.breakpointNarrow})`, {
+        media(`(min-width: ${tokens.breakpointNarrow})`, {
           width: 'auto'
         })
       )}

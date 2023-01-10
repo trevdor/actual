@@ -88,9 +88,6 @@ colors.resolve = (name, offset) => {
 
 function getStyles(isMobile) {
   return {
-    breakpointNarrow: '512px',
-    breakpointMedium: '768px',
-    breakpointWide: '1024px',
     veryLargeText: {
       fontSize: 30,
       fontWeight: 600

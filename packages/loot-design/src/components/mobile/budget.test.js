@@ -158,9 +158,7 @@ function expectToBeEditingRow(container, index) {
   expect(container.ownerDocument.activeElement).toBe(input);
 }
 
-// responsive version breaks this suite
-// skipping rather than fixing due to planned deprecation
-describe.skip('Budget', () => {
+describe('Budget', () => {
   test('up and down buttons move around categories', () => {
     const { container } = renderBudget();
     expectToNotBeEditing(container);

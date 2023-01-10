@@ -1,4 +1,4 @@
-import { styles } from 'loot-design/src/style';
+import tokens from 'loot-design/src/tokens';
 
 export function getModalRoute(name) {
   let parts = name.split('/');
@@ -8,5 +8,5 @@ export function getModalRoute(name) {
 export function isMobile(width) {
   // Simple detection: if the screen width is too small
   const containerWidth = width || window.innerWidth;
-  return containerWidth < parseInt(styles.breakpointNarrow);
+  return containerWidth < parseInt(tokens.breakpointNarrow);
 }

@@ -25,6 +25,7 @@ import ExpandArrow from 'loot-design/src/svg/ExpandArrow';
 import { styles, colors } from '../style';
 import Delete from '../svg/Delete';
 import Loading from '../svg/v1/AnimatedLoading';
+import tokens from '../tokens';
 import Text from './Text';
 import { useProperFocus } from './useProperFocus';
 import View from './View';
@@ -876,7 +877,7 @@ export function Modal({
           },
           style,
           styles.lightScrollbar,
-          media(`(min-width: ${styles.breakpointNarrow})`, {
+          media(`(min-width: ${tokens.breakpointNarrow})`, {
             minWidth: 500
           })
         )}

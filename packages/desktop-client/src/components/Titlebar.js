@@ -23,6 +23,7 @@ import ArrowLeft from 'loot-design/src/svg/v1/ArrowLeft';
 import AlertTriangle from 'loot-design/src/svg/v2/AlertTriangle';
 import ArrowButtonRight1 from 'loot-design/src/svg/v2/ArrowButtonRight1';
 import NavigationMenu from 'loot-design/src/svg/v2/NavigationMenu';
+import tokens from 'loot-design/src/tokens';
 
 import { useServerURL } from '../hooks/useServerURL';
 import AccountSyncCheck from './accounts/AccountSyncCheck';
@@ -128,7 +129,7 @@ export function SyncButton({ localPrefs, style, onSync }) {
               ? colors.n6
               : null
         },
-        media(`(min-width: ${styles.breakpointNarrow})`, {
+        media(`(min-width: ${tokens.breakpointNarrow})`, {
           color:
             syncState === 'error'
               ? colors.r7
